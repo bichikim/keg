@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 export default ({plugins = {}, beers, options = {isWork: true}}) => {
     const {isWork} = options
     if (plugins.next) {
