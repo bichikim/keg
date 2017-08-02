@@ -1,0 +1,28 @@
+{
+  "name": "keg",
+  "version": "0.0.1",
+  "description": "action container",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bichikim/keg.git"
+  },
+  "keywords": [
+    "redux",
+    "vuex",
+    "plugin",
+    "thunk",
+    "react",
+    "vue",
+    "asyn"
+  ],
+  "author": "bichi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bichikim/keg/issues"
+  },
+  "homepage": "https://github.com/bichikim/keg#readme"
+}
