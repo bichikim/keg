@@ -1,4 +1,4 @@
-export const vuex = ({plugins = {}, beers, options = {isWork: true}}) => {
+export default ({plugins = {}, beers, options = {isWork: true}}) => {
     const {isWork} = options
     if (plugins.next) {
         throw new Error('Please do not use a name "next" for a keg plugin.')
