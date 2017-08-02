@@ -1,4 +1,4 @@
-export const vuex= ({plugins = {}, beers, options = {isWork: true}}) => {
+export const vuex = ({plugins = {}, beers, options = {isWork: true}}) => {
     const {isWork} = options
     if (plugins.next) {
         throw new Error('Please do not use a name "next" for a keg plugin.')
@@ -14,13 +14,13 @@ export const vuex= ({plugins = {}, beers, options = {isWork: true}}) => {
         store.subscribe((mutation, state) => {
             const {payload} = mutation
             if (!(typeof payload === 'function')) {
-            return
-        }
-        const {type} = mutation
-        payload({
+                return
+            }
+            const {type} = mutation
+            payload({
                 ...plugins,
-            next: (data) => (store.commit(type, data)),
-    }, state)
-    })
+                next: (data) => (store.commit(type, data)),
+            }, state)
+        })
     }
 }
