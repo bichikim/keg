@@ -4,7 +4,8 @@
   "description": "action container",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/babel-node --presets stage-2 node_modules/mocha/bin/_mocha --recursive -R spec",
+    "build": "./node_modules/.bin/babel ./src/vuex/index.js --out-file index.js"
   },
   "repository": {
     "type": "git",
