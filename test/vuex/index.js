@@ -36,10 +36,16 @@ describe('Keg', () => {
         })
 
         let result
+        let stateCommitType
+        let stateCommitData
 
         const store = {
             subscribe(func) {
                 result = func
+            },
+            commit: (type, data) => {
+                stateCommitType = type
+                stateCommitData = data
             },
         }
 
@@ -60,14 +66,25 @@ describe('Keg', () => {
             },
             type: 'Hi i am a type',
         }
-        const state = 'Hi i am a state'
+        const state = {
+            item: 'this is a state item',
+        }
 
         describe('the result function', () => {
             it('use payload in parameter of mutation', () => {
                 result(mutation, state)
                 expect(mutationResultPayload).to.be.a('object')
                 expect(mutationResultPayload.next).to.be.a('function')
-                expect(mutationResultState).to.equal('Hi i am a state')
+                expect(mutationResultState).to.be.a('object')
+                expect(mutationResultState.item).to.equal('this is a state item')
+            })
+        })
+
+        describe('the next plugin', () => {
+            it('use a commit function in state', () => {
+                mutationResultPayload.next('this is a data')
+                expect(stateCommitType).to.equal('Hi i am a type')
+                expect(stateCommitData).to.equal('this is a data')
             })
         })
     }
