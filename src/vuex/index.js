@@ -1,5 +1,7 @@
 import 'babel-polyfill'
 import forEach from 'lodash/forEach'
+import isFunction from 'lodash/isFunction'
+import isObject from 'lodash/isObject'
 
 /**
  * Register store
@@ -17,14 +19,14 @@ const agePlugins = (plugins, store) => {
 
 /**
  * Register mutation and state
- * @param {object} plugins agedPlugins
+ * @param {object} agedPlugins agedPlugins
  * @param {object} mutation
  * @param {object} state
  * @return {object}
  */
-const openPlugins = (plugins, mutation, state) => {
+const openPlugins = (agedPlugins, mutation, state) => {
   const openedPlugins = {}
-  forEach(plugins, (plugin, key) => {
+  forEach(agedPlugins, (plugin, key) => {
     openedPlugins[key] = plugin(mutation, state)
   })
   return openedPlugins
@@ -43,7 +45,7 @@ export default ({plugins = {}, beers, options = {isWork: true}}) => {
     throw new Error('Please do not use "next" for a keg plugin name.')
   }
   // Beers just another name of plugins. cheers!
-  if (typeof beers === 'object'){
+  if (isObject(beers)){
     Object.assign(plugins, beers)
   }
 
@@ -55,7 +57,7 @@ export default ({plugins = {}, beers, options = {isWork: true}}) => {
     store.subscribe((mutation, state) => {
       const {payload} = mutation
       const openedPlugins = openPlugins(agedPlugins, mutation, state)
-      if (!(typeof payload === 'function')){
+      if (!isFunction(payload)){
         return
       }
       const {type} = mutation
