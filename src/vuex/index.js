@@ -20,7 +20,7 @@ const agePlugins = (plugins, store) => {
  * @param {object} plugins agedPlugins
  * @param {object} mutation
  * @param {object} state
- * @return {{}}
+ * @return {object}
  */
 const openPlugins = (plugins, mutation, state) => {
   const openedPlugins = {}

@@ -1,4 +1,5 @@
 # Keg
+
 > Vuex plugin. It can run a payload function in mutation
 ## Installation
 ``
