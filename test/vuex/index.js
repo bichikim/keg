@@ -1,91 +1,71 @@
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
 import keg from '../../src/vuex/index'
-describe('Keg', () => {
-    it('is a function', () => {
-        expect(keg).to.be.a('function')
+describe('Keg vuex plugin', () => {
+  let executeDataFromKegPlugin = null
+  const kegPlugin = (options) => (store) => (mutations, state) => (executeData) => {
+    executeDataFromKegPlugin = executeData
+  }
+  const nextHandler = keg({
+    plugins: {
+      kegPlugin: kegPlugin({testText: 'OK'}),
+    },
+  })
+
+  it('should return a function to handle next', () => {
+    expect(nextHandler).to.be.a('function')
+  })
+  describe('handle next', () => {
+    let TypeFromCommit = null
+    let DataFromCommit = null
+    let KegPluginFromActionFunction = null
+    let nextFromActionFunction = null
+    let VuexSubscribeHandler = null
+    const store = {
+      subscribe: (func) => {
+        VuexSubscribeHandler = func
+      },
+      commit: (type, data) => {
+        TypeFromCommit = type
+        DataFromCommit = data
+      },
+    }
+    nextHandler(store)
+    it('should register a function in subscribe of store', () => {
+      expect(store.subscribe).to.be.a('function')
     })
-    {
-        let isErrorForbid = false
-        try {
-            keg({plugins: {next: (data) => (data)}})
-        } catch (error) {
-            isErrorForbid = true
-        }
 
-        it('cannot allow name of next plugin', () => {
-            expect(isErrorForbid).to.equal(true)
+    describe('Vuex subscribe handler', () => {
+      const mutation = {
+        payload: ({kegPlugin, next}) => {
+          KegPluginFromActionFunction = kegPlugin
+          nextFromActionFunction = next
+          kegPlugin({textTest: 'OK'})
+          next({textTest: 'OK'})
+        },
+        type: 'testType',
+      }
+      const state = {
+        testText: 'Ok',
+      }
+      VuexSubscribeHandler(mutation, state)
+      it('can run a payload in mutation with an object which has a next function and plugins', () => {
+        expect(KegPluginFromActionFunction).to.be.a('function')
+        expect(nextFromActionFunction).to.be.a('function')
+      })
+      describe('Payload in Mutation', () => {
+        it('can run functions of next and plugins', () => {
+          expect(executeDataFromKegPlugin).to.be.an('object')
+          expect(TypeFromCommit).to.be.an('string')
+          expect(DataFromCommit).to.be.an('object')
+          expect(executeDataFromKegPlugin.textTest).to.be.an('string')
+          expect(TypeFromCommit).to.equal('testType')
+          expect(DataFromCommit.textTest).to.be.an('string')
+          expect(executeDataFromKegPlugin.textTest).to.equal('OK')
+          expect(DataFromCommit.textTest).to.equal('OK')
         })
-    }
-    {
-        let isErrorAllow = false
-        let kegForTest
-        let TestPluginResult
-        try {
-            kegForTest = keg({plugins: {TestPlugin: (data) => (TestPluginResult = data)}})
-        } catch (error) {
-            isErrorAllow = true
-        }
-
-        it('can allow other name of plugin', () => {
-            expect(isErrorAllow).to.equal(false)
-        })
-
-        it('return a function', () => {
-            expect(kegForTest).to.be.a('function')
-        })
-
-        let result
-        let stateCommitType
-        let stateCommitData
-
-        const store = {
-            subscribe(func) {
-                result = func
-            },
-            commit: (type, data) => {
-                stateCommitType = type
-                stateCommitData = data
-            },
-        }
-
-        describe('the function', () => {
-            it('use store.subscribe with result function', () => {
-                kegForTest(store)
-                expect(result).to.be.a('function')
-            })
-        })
-
-        let mutationResultPayload
-        let mutationResultState
-
-        const mutation = {
-            payload: (payload, state) => {
-                mutationResultPayload = payload
-                mutationResultState = state
-            },
-            type: 'Hi i am a type',
-        }
-        const state = {
-            item: 'this is a state item',
-        }
-
-        describe('the result function', () => {
-            it('use payload in parameter of mutation', () => {
-                result(mutation, state)
-                expect(mutationResultPayload).to.be.a('object')
-                expect(mutationResultPayload.next).to.be.a('function')
-                expect(mutationResultState).to.be.a('object')
-                expect(mutationResultState.item).to.equal('this is a state item')
-            })
-        })
-
-        describe('the next plugin', () => {
-            it('use a commit function in state', () => {
-                mutationResultPayload.next('this is a data')
-                expect(stateCommitType).to.equal('Hi i am a type')
-                expect(stateCommitData).to.equal('this is a data')
-            })
-        })
-    }
+      })
+    })
+  })
 })
+
