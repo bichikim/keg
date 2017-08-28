@@ -1,5 +1,9 @@
 # Keg
 > Vuex plugin. It can run a payload function in mutation
+## Installation
+``
+not yet
+``
 ## How to Register & Use this
 ````javascript
 import Vue from 'vue'
