@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import {describe, it} from 'mocha'
-import keg from '../../src/vuex/index'
+import keg from '../src/index'
 describe('Keg vuex plugin', () => {
   let executeDataFromKegPlugin = null
   const kegPlugin = (options) => (store) => (mutations, state) => (executeData) => {
