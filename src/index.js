@@ -39,8 +39,8 @@ const openPlugins = (agedPlugins, mutation, state) => {
  * @param {{isWork}}options
  * @return {function(*=)}
  */
-export default ({plugins = {}, beers, options = {isWork: true}}) => {
-  const {isWork} = options
+export default ({plugins = {}, beers, options = {}}) => {
+  const {isWork = true, name = 'KEG'} = options
   if (plugins.next){
     throw new Error('Please do not use "next" for a keg plugin name.')
   }
@@ -60,7 +60,7 @@ export default ({plugins = {}, beers, options = {isWork: true}}) => {
       if (!isFunction(payload)){
         return
       }
-      const {type} = mutation
+      const type = `${mutation.type}_${name}`
       payload({
         ...openedPlugins,
         next: (data) => (store.commit(type, data)),
