@@ -8,8 +8,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-require('babel-polyfill');
-
 var _forEach = require('lodash/forEach');
 
 var _forEach2 = _interopRequireDefault(_forEach);
@@ -32,14 +30,14 @@ var agePlugins = function agePlugins(plugins, store) {
 
 /**
  * Register mutation and state
- * @param {object} plugins agedPlugins
+ * @param {object} agedPlugins
  * @param {object} mutation
  * @param {object} state
  * @return {{}}
  */
-var openPlugins = function openPlugins(plugins, mutation, state) {
+var openPlugins = function openPlugins(agedPlugins, mutation, state) {
   var openedPlugins = {};
-  (0, _forEach2.default)(plugins, function (plugin, key) {
+  (0, _forEach2.default)(agedPlugins, function (plugin, key) {
     openedPlugins[key] = plugin(mutation, state);
   });
   return openedPlugins;
@@ -47,19 +45,16 @@ var openPlugins = function openPlugins(plugins, mutation, state) {
 
 /**
  * Keg plugin
- * @param {object} plugins
- * @param {object|undefined} beers
- * @param {{isWork}}options
+ * @param {object} data
+ * @param {object} data.plugins
+ * @param {object|undefined} data.beers
  * @return {function(*=)}
  */
 
 exports.default = function (_ref) {
   var _ref$plugins = _ref.plugins,
       plugins = _ref$plugins === undefined ? {} : _ref$plugins,
-      beers = _ref.beers,
-      _ref$options = _ref.options,
-      options = _ref$options === undefined ? { isWork: true } : _ref$options;
-  var isWork = options.isWork;
+      beers = _ref.beers;
 
   if (plugins.next) {
     throw new Error('Please do not use "next" for a keg plugin name.');
@@ -70,9 +65,6 @@ exports.default = function (_ref) {
   }
 
   return function (store) {
-    if (!isWork) {
-      return;
-    }
     var agedPlugins = agePlugins(plugins, store);
     store.subscribe(function (mutation, state) {
       var payload = mutation.payload;
@@ -81,8 +73,7 @@ exports.default = function (_ref) {
       if (!(typeof payload === 'function')) {
         return;
       }
-      var type = mutation.type;
-
+      var type = mutation;
       payload(_extends({}, openedPlugins, {
         next: function next(data) {
           return store.commit(type, data);

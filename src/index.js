@@ -53,7 +53,7 @@ export default ({plugins = {}, beers}) => {
       if (!(typeof payload === 'function')){
         return
       }
-      const type = mutation
+      const {type} = mutation
       payload({
         ...openedPlugins,
         next: (data) => (store.commit(type, data)),

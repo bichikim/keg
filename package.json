@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/babel-node --presets stage-2 node_modules/mocha/bin/_mocha --recursive -R spec",
-    "build-vuex": "./node_modules/.bin/babel ./src/vuex/index.js --out-file vuex/index.js",
-    "build-redux-react": "./node_modules/.bin/babel ./src/redux-react/index.js --out-file redux-react/index.js"
+    "build": "./node_modules/.bin/babel ./src/index.js --out-file index.js"
   },
   "repository": {
     "type": "git",

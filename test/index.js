@@ -18,7 +18,7 @@ describe('Keg vuex plugin', () => {
   describe('handle next', () => {
     let TypeFromCommit = null
     let DataFromCommit = null
-    let KegPluginFromActionFunction = null
+    let kegPluginFromActionFunction = null
     let nextFromActionFunction = null
     let VuexSubscribeHandler = null
     const store = {
@@ -38,7 +38,7 @@ describe('Keg vuex plugin', () => {
     describe('Vuex subscribe handler', () => {
       const mutation = {
         payload: ({kegPlugin, next}) => {
-          KegPluginFromActionFunction = kegPlugin
+          kegPluginFromActionFunction = kegPlugin
           nextFromActionFunction = next
           kegPlugin({textTest: 'OK'})
           next({textTest: 'OK'})
@@ -50,7 +50,7 @@ describe('Keg vuex plugin', () => {
       }
       VuexSubscribeHandler(mutation, state)
       it('can run a payload in mutation with an object which has a next function and plugins', () => {
-        expect(KegPluginFromActionFunction).to.be.a('function')
+        expect(kegPluginFromActionFunction).to.be.a('function')
         expect(nextFromActionFunction).to.be.a('function')
       })
       describe('Payload in Mutation', () => {
