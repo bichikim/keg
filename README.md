@@ -31,6 +31,6 @@ const store = new Vuex.Store({
       },
     })],
   })
-  // result mutation: {type: doSayHi, payload: {foo: 'yeah!'}}
+  // result mutation: {type: 'doSayHi', payload: {foo: 'yeah!'}}
   // result console 'hi!, foo'
 ````
