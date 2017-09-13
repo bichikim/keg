@@ -1,4 +1,6 @@
 import forEach from 'lodash/forEach'
+import isFunction from 'lodash/isFunction'
+import isObject from 'lodash/isObject'
 
 /**
  * Register store
@@ -41,7 +43,7 @@ export default ({plugins = {}, beers}) => {
     throw new Error('Please do not use "next" for a keg plugin name.')
   }
   // Beers just another name of plugins. cheers!
-  if (typeof beers === 'object'){
+  if (isObject(beers)){
     Object.assign(plugins, beers)
   }
 
@@ -49,10 +51,10 @@ export default ({plugins = {}, beers}) => {
     const agedPlugins = agePlugins(plugins, store)
     store.subscribe((mutation, state) => {
       const {payload} = mutation
-      const openedPlugins = openPlugins(agedPlugins, mutation, state)
-      if (!(typeof payload === 'function')){
+      if (!isFunction(payload)){
         return
       }
+      const openedPlugins = openPlugins(agedPlugins, mutation, state)
       const {type} = mutation
       payload({
         ...openedPlugins,

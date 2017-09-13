@@ -6,11 +6,17 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _forEach = require('lodash/forEach');
 
 var _forEach2 = _interopRequireDefault(_forEach);
+
+var _isFunction = require('lodash/isFunction');
+
+var _isFunction2 = _interopRequireDefault(_isFunction);
+
+var _isObject = require('lodash/isObject');
+
+var _isObject2 = _interopRequireDefault(_isObject);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60,7 +66,7 @@ exports.default = function (_ref) {
     throw new Error('Please do not use "next" for a keg plugin name.');
   }
   // Beers just another name of plugins. cheers!
-  if ((typeof beers === 'undefined' ? 'undefined' : _typeof(beers)) === 'object') {
+  if ((0, _isObject2.default)(beers)) {
     Object.assign(plugins, beers);
   }
 
@@ -69,11 +75,12 @@ exports.default = function (_ref) {
     store.subscribe(function (mutation, state) {
       var payload = mutation.payload;
 
-      var openedPlugins = openPlugins(agedPlugins, mutation, state);
-      if (!(typeof payload === 'function')) {
+      if (!(0, _isFunction2.default)(payload)) {
         return;
       }
-      var type = mutation;
+      var openedPlugins = openPlugins(agedPlugins, mutation, state);
+      var type = mutation.type;
+
       payload(_extends({}, openedPlugins, {
         next: function next(data) {
           return store.commit(type, data);
