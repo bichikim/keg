@@ -1,5 +1,5 @@
 {
-  "name": "keg",
+  "name": "vuex-keg",
   "version": "0.0.1",
   "description": "action container",
   "main": "index.js",

@@ -1,9 +1,14 @@
 # Keg
 
 > Vuex plugin. It can run a payload function in Mutation Commit
+
 ## Installation
 ``
-not yet
+npm i -S vuex-keg
+``
+
+``
+yarn add vuex-keg
 ``
 ## How to Register & Use this
 ````javascript
