@@ -39,11 +39,11 @@ const openPlugins = (agedPlugins, mutation, state) => {
  * @return {function(*=)}
  */
 export default ({plugins = {}, beers}) => {
-  if (plugins.next){
+  if(plugins.next){
     throw new Error('Please do not use "next" for a keg plugin name.')
   }
   // Beers just another name of plugins. cheers!
-  if (isObject(beers)){
+  if(isObject(beers)){
     Object.assign(plugins, beers)
   }
 
@@ -51,7 +51,7 @@ export default ({plugins = {}, beers}) => {
     const agedPlugins = agePlugins(plugins, store)
     store.subscribe((mutation, state) => {
       const {payload} = mutation
-      if (!isFunction(payload)){
+      if(!isFunction(payload)){
         return
       }
       const openedPlugins = openPlugins(agedPlugins, mutation, state)
