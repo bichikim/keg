@@ -1,3 +1,4 @@
+![intro](./img/intro.png)
 # Keg
 
 > Vuex plugin. It can run a payload function in Mutation Commit
