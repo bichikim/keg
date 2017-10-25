@@ -1,3 +1,10 @@
+/**
+ *
+ * @author Bichi Kim [bichi@live.co.kr]
+ * @copyright (c) Naree Co.
+ * @license MIT
+ * @module
+ */
 import forEach from 'lodash/forEach'
 import isFunction from 'lodash/isFunction'
 import isObject from 'lodash/isObject'
