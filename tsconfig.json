@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "types": [
+      "mocha"
+    ],
+    "module": "esnext",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es5",
+      "es6",
+      "es7",
+      "es2015",
+      "es2016",
+      "es2017",
+      "esnext"
+    ],
+    "noEmitHelpers": false,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    /*"outFile": "./build/app.js",*/
+    "paths": {
+      "@/*": ["./src/*"],
+      "~/*": ["./lib/*"],
+      "@@/*": ["./*"],
+      "~~/*": ["./*"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "types/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "templates"
+  ],
+  "compileOnSave": false
+}
