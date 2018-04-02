@@ -8,7 +8,7 @@
 [LICENSE IMAGE]:https://img.shields.io/npm/l/vuex-keg.svg
 [LICENSE LINK]:https://www.npmjs.org/package/vuex-keg
 
-> Vuex plugin. It can run a payload function in Mutation Commit
+> Vuex supporting custom util plugin.
 
 ## Installation
 ``
