@@ -1,7 +1,6 @@
-![intro](./img/intro.png)
+![intro](./media/intro.png)
 # Keg
 
-[![NPM Version][NPM IMAGE]][NPM LINK]
 [![LICENSE][LICENSE IMAGE]][LICENSE LINK]
 
 [NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=flat
