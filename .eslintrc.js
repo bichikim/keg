@@ -1,4 +1,3 @@
-/* eslint-disable max-len,no-magic-numbers */
 module.exports = {
   'plugins': ['html', 'vue', 'typescript'],
   'env': {
@@ -9,20 +8,6 @@ module.exports = {
     'node': true,
     'mocha': true,
   },
-  overrides: [
-    {
-      files: ['*.js'],
-      "rules": {
-        'indent': 'off',
-      }
-    },
-    {
-      files: ['*.ts'],
-      "rules": {
-        'new-cap': 'off',
-      }
-    }
-  ],
   'extends': ['eslint:recommended', 'plugin:vue/recommended'],
   parserOptions: {
     parser: 'typescript-eslint-parser',
@@ -36,13 +21,18 @@ module.exports = {
     // 'no-async-in-computed-properties': 'error',
     'no-dupe-keys': 'error',
     'vue/jsx-uses-vars': 'error',
-    'vue/max-attributes-per-line': ['error', {'singleline': 5, 'multiline': {'max': 3, 'allowFirstLine': false}}],
+    'vue/max-attributes-per-line': [
+      'error', {
+        'singleline': 5,
+        'multiline': {
+          'max': 3,
+          'allowFirstLine': false,
+        },
+      }],
     'vue/require-default-prop': 'error',
     /**************************************
      * common javascript options
      **************************************/
-    'semi': ['error', 'never'],
-    'quotes': ['error', 'single'],
     'array-callback-return': 'error',
     'arrow-parens': ['error', 'always'],
     'arrow-spacing': ['error', {before: true, after: true}],
@@ -50,20 +40,28 @@ module.exports = {
     'block-spacing': ['error', 'never'],
     'camelcase': ['error', {'properties': 'always'}], // need to check to working well
     'class-methods-use-this': 'error',
-    'comma-dangle': ['error', 'always-multiline'],
+    'comma-dangle': ['error', 'only-multiline'],
     'comma-style': ['error', 'last'],
     'complexity': ['error', 20],
     'consistent-this': ['error', 'self'],
     'default-case': 'error',
     'func-name-matching': ['error', 'never'],
-    'func-style': ['error', 'expression', {'allowArrowFunctions': true}],
+    'func-style': ['error', 'expression', {'allowArrowFunctions': true }],
     'getter-return': 'error',
     'global-require': 'error',
     'guard-for-in': 'error',
-    'indent': ['error', 2, { "SwitchCase": 1 }], // owing to a typescript-eslint-parser error
+    // 'indent': ['error', 2, {
+    //   'MemberExpression': 1,
+    //   'SwitchCase': 1,
+    //   'FunctionDeclaration': {
+    //     'body': 1,
+    //     'parameters': 2,
+    //   },
+    //   'ObjectExpression': 1,
+    // }], // owing to a typescript-eslint-parser error
     'max-depth': ['error', {'max': 4}],
     'max-len': ['error', 100],
-    'max-lines': 'error',
+    'max-lines': ['error', 400],
     'max-nested-callbacks': ['error', {'max': 3}],
     'max-params': ['error', {'max': 6}],
     'max-statements-per-line': ['error', {'max': 2}],
@@ -94,8 +92,8 @@ module.exports = {
     'no-lone-blocks': 'error',
     'no-lonely-if': 'error',
     'no-loop-func': 'error',
-    'no-magic-numbers': ['error', {'ignore': [0, 1]}],
-    // 'no-mixed-operators': ['error', {groups: [["&&", "||"],]}],
+    'no-magic-numbers': ['error', {'ignore': [-1, 0, 1, 2]}],
+    'no-mixed-operators': 'error',
     'no-multi-assign': 'error',
     'no-multi-str': 'error',
     'no-multiple-empty-lines': 'error',
@@ -138,8 +136,7 @@ module.exports = {
     'space-before-function-paren': ['error', {'anonymous': 'never', 'named': 'never', 'asyncArrow': 'always'}],
     'vars-on-top': 'error',
     'keyword-spacing': ['error', {
-      'before': false, 'after': false,
-      'overrides': {
+      'before': false, 'after': false, 'overrides': {
         'const' : {before: true, after: true},
         'from': {before: true, after: true},
         'import': {before: true, after: true},
@@ -150,6 +147,7 @@ module.exports = {
         'case':{after: true},
         'extends': {before: true},
         'implements': {before: true},
+        'let': {before: true, after: true},
       },
     }],
     // 'indent': ['error', 2],
@@ -197,9 +195,6 @@ module.exports = {
           },
           'colon': {
             'before': false,
-            'after': true,
-          },
-        },
-      }],
+            'after': true}}}],
   }
 };

@@ -1,8 +1,11 @@
 {
-  "name": "vuex-keg",
-  "version": "0.0.3",
-  "description": "vuex action container",
-  "main": "index.js",
+  "name": "sulleong",
+  "version": "0.0.4",
+  "description": "Change object key by key map",
+  "author": "bichi",
+  "main": "dist/app.js",
+  "types": "src/index.ts",
+  "license": "MIT",
   "scripts": {
     "build": "./node_modules/.bin/babel-node build/build.js",
     "doc": "typedoc -out ./docs ./src --media ./media",
@@ -11,31 +14,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bichikim/keg.git"
+    "url": "git+https://github.com/bichikim/areu.git"
   },
   "keywords": [
-    "redux",
-    "vuex",
-    "plugin",
-    "thunk",
-    "react",
-    "vue",
-    "asyn"
+    "runtime",
+    "typed",
+    "schema"
   ],
-  "author": "bichi",
-  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bichikim/keg/issues"
+    "url": "https://github.com/bichikim/areu/issues"
   },
-  "homepage": "https://github.com/bichikim/keg#readme",
+  "homepage": "https://github.com/bichikim/areu#readme",
   "devDependencies": {
     "@types/chai": "^4.1.2",
     "@types/lodash": "^4.14.106",
     "@types/mocha": "^5.0.0",
     "@types/sinon": "^4.3.0",
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-1": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
@@ -65,10 +63,14 @@
     "typescript": "^2.8.1",
     "typescript-eslint-parser": "^14.0.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
-    "webpack": "^4.3.0",
-    "webpack-merge": "^4.1.2"
+    "vuex": "^3.0.1",
+    "webpack": "^4.4.1",
+    "webpack-merge": "^4.1.2",
+    "vue": "^2.5.16",
+    "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
     "lodash": "^4.17.5"
+
   }
 }

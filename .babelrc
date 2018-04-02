@@ -7,7 +7,7 @@
           "last 2 versions",
           "not ie <= 8"
         ],
-        "modules": "amd"
+        "modules": "umd"
       }
     }
   ], "stage-1", "stage-2", "stage-3"]

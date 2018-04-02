@@ -1,32 +1,31 @@
 /**
- * @author Bichi Kim <bichi@live.co.kr> <bichi@pjfactory.com>
+ * karma settings
+ * This test must have packages below
+ * karma, karma-chai, karma-sourcemap-loader, karma-spec-reporter, karma-webpack
+ * mocha, chai, karma-coverage
+ * @author Bichi Kim <bichi@live.co.kr>
  */
-const webpack = require('./webpack.config.js')
+const webpack = require('../../build/webpack.test.config.js')
 module.exports = function(config) {
   config.set({
     browsers: ['ChromeWithoutSecurity'],
-    frameworks: ['mocha', 'chai', 'sinon'],
+    frameworks: ['mocha', 'chai'],
     reporters: ['spec', 'coverage'],
     files: [
-      {pattern: '../../lib/**/*.spec.js', watched: true},
-      {pattern: '../../src/**/*.spec.js', watched: true},
-      {pattern: '../../lib/**/*.spec.ts', watched: true},
-      {pattern: '../../src/**/*.spec.ts', watched: true},
-      {pattern: './specs/**/*.spec.js', watched: true},
+      {pattern: '../../src/**/*.spec.js', watched: false},
+      {pattern: './specs/**/*.spec.js', watched: false},
     ],
     exclude: [
-      '../../lib/**/*.spec.skip.js',
-      '../../src/**/*.spec.skip.ts',
+      '../../src/**/*.spec.skip.js',
     ],
     preprocessors: {
-      '../../lib/**/*.js': ['webpack', 'sourcemap'],
-      '../../lib/**/*.ts': ['webpack', 'sourcemap'],
       '../../src/**/*.js': ['webpack', 'sourcemap'],
       '../../src/**/*.ts': ['webpack', 'sourcemap'],
       './specs/**/*.js': ['webpack', 'sourcemap'],
+      './specs/**/*.ts': ['webpack', 'sourcemap'],
     },
     coverageReporter: {
-      dir : 'coverage/',
+      dir: 'coverage/',
       reporters: [
         {type: 'html', subdir: 'html'},
         {type: 'lcovonly', subdir: 'lcov'},

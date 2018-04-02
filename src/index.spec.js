@@ -278,6 +278,33 @@ describe('Keg', () => {
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
+    it('can change default options', () => {
+      keg = new Keg({
+        only: ['forOnly'],
+        except: ['forExcept'],
+      })
+      makeStore(keg)
+      // change options
+      keg.options = {
+        only: ['forOnly'],
+      }
+      store.dispatch('testOnly', 'payload')
+      expect(receiveContext.test).to.be.an('undefined')
+      expect(receiveContext.forExcept).to.be.an('undefined')
+      expect(receiveContext.forOnly).to.be.a('function')
+    })
+    it('can get options', () => {
+      keg = new Keg({
+        only: ['forOnly'],
+        except: ['forExcept'],
+      })
+      makeStore(keg)
+      store.dispatch('testOnly', 'payload')
+      expect(keg.options).to.deep.equal({
+        only: ['forOnly'],
+        except: ['forExcept'],
+      })
+    })
   })
 
 })

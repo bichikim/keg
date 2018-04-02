@@ -1,50 +1,90 @@
-![intro](./img/intro.png)
-# Keg
+# Sulleong
 
-[![NPM Version][NPM IMAGE]][NPM LINK]
-[![LICENSE][LICENSE IMAGE]][LICENSE LINK]
+![typescript][typescript]
 
-[NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=flat
-[NPM LINK]:https://www.npmjs.org/package/vuex-keg
-[LICENSE IMAGE]:https://img.shields.io/npm/l/vuex-keg.svg
-[LICENSE LINK]:https://www.npmjs.org/package/vuex-keg
+[typescript]:https://img.shields.io/badge/typescript-2.7.*-blue.svg
 
-> Vuex plugin. It can run a payload function in Mutation Commit
+> Key changer
 
-## Installation
-``
-npm i -S vuex-keg
-``
+## Install
+```bash
+yarn add sulleong
+npm install --save sulleong
+```
 
-``
-yarn add vuex-keg
-``
-## How to Register & Use this
-````javascript
-import Vue from 'vue'
-import Vuex from 'vuex'
-import keg from './index'
-Vue.use(Vuex)
-const store = new Vuex.Store({
-    modules: {
-      //...
+## How to use
+```javascript
+
+import sulleong, {PairMap} from './src/index'
+let map = new PairMap({
+  from1: 'to1',
+  from2: 'to2',
+  from3: 'to3',
+})
+let data = {
+  from1: 'data',
+  from2: 'data',
+  from3: 'data',
+}
+const result = sulleong(data, map, false)
+expect(result).to.deep.equal({
+  to1: 'data',
+  to2: 'data',
+  to3: 'data',
+})
+const resultOpposite = sulleong(result, map, true)
+expect(resultOpposite).to.deep.equal(data)
+
+const map = new PairMap({
+  from1: 'to1',
+  fromDeep: {
+    '@': 'toDeep',
+    from2: 'to2',
+    from3: 'to3',
+    fromDeepDeep: {
+      '@': 'toDeepDeep',
+      from4: 'to4',
+      from5: 'to5',
     },
-    actions: {
-      doSayHi({commit}, data){
-        commit('doSayHi', ({justSayHi, next}) => {
-          // do the function
-          justSayHi('foo')
-          // do mutation with data 
-          next({foo: 'yeah!'})
-        })
-      }
+  },
+  from6: 'to6',
+})
+const data = {
+  from1: 'data',
+  fromDeep: {
+    from2: 'data',
+    from3: 'data',
+    fromDeepDeep: {
+      from4: 'data',
+      from5: 'data',
     },
-    plugins: [keg({
-      plugins: {
-        justSayHi: (store) => (mutation, state) => (yourPrams) => (window.console.log('hi!', yourPrams)),
-      },
-    })],
-  })
-  // result mutation: {type: 'doSayHi', payload: {foo: 'yeah!'}}
-  // result console 'hi!, foo'
-````
+  },
+  from6: 'data',
+}
+const result = sulleong(data, map, false)
+expect(result).to.deep.equal({
+  to1: 'data',
+  toDeep: {
+    to2: 'data',
+    to3: 'data',
+    toDeepDeep: {
+      to4: 'data',
+      to5: 'data',
+    },
+  },
+  to6: 'data',
+})
+const resultOpposite = sulleong(result, map, true)
+expect(resultOpposite).to.deep.equal(data)
+```
+
+### PairMap Options
+```typescript
+interface IPairMap{
+  // set self identifier default = '@'
+  selfFlag? :string
+}
+```
+
+
+

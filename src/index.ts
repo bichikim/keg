@@ -1,22 +1,25 @@
-import {ActionHandler, Store} from '@@/types/vuex'
+import {ActionContext, Store} from 'vuex/types'
 import clone from 'lodash/clone'
 import forEach from 'lodash/forEach'
 import omit from 'lodash/omit'
 import pick from 'lodash/pick'
-import {IKegOptions, IPlugins, IVuexKegOptions, TAgedPlugin, TInjectedFunction} from './types'
+import {
+  IKegOptions, IPlugins, IVuexKegOptions, TAgedPlugin, TInjectedFunction,
+  IAgedPlugins, ActionHandler
+} from './types'
 
 const sKeg = Symbol('keg')
 
 const _agePlugins = (plugins: IPlugins, store: Store<any>): {} => {
-  const agedPlugins = {}
+  const agedPlugins: IAgedPlugins = {}
   forEach(plugins, (plugin, key) => {
     agedPlugins[key] = plugin(store)
   })
   return agedPlugins
 }
 
-const _openPlugins = (agedPlugins: {}, context, payload) => {
-  const openedPlugins = {}
+const _openPlugins = (agedPlugins: {}, context: ActionContext<any, any>, payload: any) => {
+  const openedPlugins: IPlugins = {}
   forEach(agedPlugins, (plugin, key) => {
     openedPlugins[key] = plugin(context, payload)
   })
@@ -27,9 +30,9 @@ export default (options: IVuexKegOptions = {}) => {
   const {plugins = {}, beers = {}} = options
   const myPlugins: IPlugins = {}
   Object.assign(myPlugins, plugins, beers)
-  return (store: Store<any>) => {
+  return (store: any) => {
     const agedPlugins = _agePlugins(myPlugins, store)
-    store.subscribeAction((action, state) => {
+    store.subscribeAction((action: any, state: any) => {
       action.payload = {type: action.type, payload: action.payload}
       if(!state[sKeg]){
         state[sKeg] = agedPlugins
