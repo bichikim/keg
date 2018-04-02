@@ -1,8 +1,5 @@
 import {ActionContext, Store} from 'vuex/types'
-import clone from 'lodash/clone'
-import forEach from 'lodash/forEach'
-import omit from 'lodash/omit'
-import pick from 'lodash/pick'
+import {clone, forEach, omit, pick} from 'lodash'
 import {
   IKegOptions, IPlugins, IVuexKegOptions, TAgedPlugin, TInjectedFunction,
   IAgedPlugins, ActionHandler
