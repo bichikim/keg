@@ -1,5 +1,5 @@
 {
-  "name": "sulleong",
+  "name": "vuex-keg",
   "version": "0.0.5",
   "description": "Change object key by key map",
   "author": "bichi",
@@ -14,17 +14,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bichikim/areu.git"
+    "url": "git+https://github.com/bichikim/keg.git"
   },
   "keywords": [
-    "runtime",
-    "typed",
-    "schema"
+    "redux",
+    "vuex",
+    "plugin",
+    "thunk",
+    "react",
+    "vue",
+    "asyn"
   ],
   "bugs": {
-    "url": "https://github.com/bichikim/areu/issues"
+    "url": "https://github.com/bichikim/keg/issues"
   },
-  "homepage": "https://github.com/bichikim/areu#readme",
+  "homepage": "https://github.com/bichikim/keg#readme",
   "devDependencies": {
     "@types/chai": "^4.1.2",
     "@types/lodash": "^4.14.106",
