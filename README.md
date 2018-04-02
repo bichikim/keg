@@ -46,5 +46,6 @@ const store = new Vuex.Store({
         justSayHi: (store) => (context, payload) => (yourPrams) => (window.console.log('hi!', yourPrams)),
       },
     })],
+    })
   // result console 'hi!, foo'
 ````
