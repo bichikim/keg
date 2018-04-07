@@ -67,15 +67,13 @@
     "typedoc": "^0.11.1",
     "typescript": "^2.8.1",
     "typescript-eslint-parser": "^14.0.0",
-    "uglifyjs-webpack-plugin": "^1.2.4",
-    "vuex": "^3.0.1",
-    "webpack": "^4.4.1",
-    "webpack-merge": "^4.1.2",
     "vue": "^2.5.16",
-    "webpack-node-externals": "^1.6.0"
+    "vuex": "^3.0.1",
+    "webpack": "^4.5.0",
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.5"
-
   }
 }
