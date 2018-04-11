@@ -1,6 +1,6 @@
 {
   "name": "vuex-keg",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Change object key by key map",
   "author": "bichi",
   "main": "dist/app.js",
