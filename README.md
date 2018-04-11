@@ -43,7 +43,7 @@ const store = new Vuex.Store({
     },
     plugins: [VuexKeg({
       plugins: {
-        justSayHi: (store) => (context, payload) => (yourPrams) => (window.console.log('hi!', yourPrams)),
+        justSayHi: (store) => (context) => (yourPrams) => (window.console.log('hi!', yourPrams)),
       },
     })],
     })

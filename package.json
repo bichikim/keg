@@ -1,6 +1,6 @@
 {
   "name": "vuex-keg",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Change object key by key map",
   "author": "bichi",
   "main": "dist/app.js",
@@ -34,7 +34,7 @@
     "@types/chai": "^4.1.2",
     "@types/lodash": "^4.14.106",
     "@types/mocha": "^5.0.0",
-    "@types/sinon": "^4.3.0",
+    "@types/sinon": "^4.3.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.2",
@@ -45,7 +45,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
-    "eslint-friendly-formatter": "^4.0.0",
+    "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-html": "^4.0.2",
     "eslint-plugin-promise": "^3.7.0",
@@ -62,20 +62,19 @@
     "karma-spec-reporter": "0.0.32",
     "karma-webpack": "^3.0.0",
     "mocha": "^5.0.5",
-    "ts-loader": "^4.1.0",
+    "ts-loader": "^4.2.0",
     "tslint": "^5.9.1",
     "typedoc": "^0.11.1",
     "typescript": "^2.8.1",
     "typescript-eslint-parser": "^14.0.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
-    "vuex": "^3.0.1",
-    "webpack": "^4.4.1",
-    "webpack-merge": "^4.1.2",
     "vue": "^2.5.16",
+    "vuex": "^3.0.1",
+    "webpack": "^4.5.0",
+    "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
     "lodash": "^4.17.5"
-
   }
 }
