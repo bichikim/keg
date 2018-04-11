@@ -31,7 +31,7 @@ export default (options: IVuexKegOptions = {}) => {
   return (store: any = {}) => {
     const {state} = store
     if(!state){
-      throw new Error('[vuex-keg] rootStore has no state')
+      throw new Error('[vuex-keg] rootState is undefined at registering keg-plugin')
     }
     store.state[sKeg] = _agePlugins(myPlugins, store)
   }
@@ -44,6 +44,9 @@ export const keg = (
   return (context, payload) => {
     const {rootState} = context
     let myPlugins: {[name: string]: TAgedPlugin} = rootState[sKeg]
+    if(!myPlugins){
+      throw new Error('[vuex-keg] rootState is undefined at getting keg-plugin')
+    }
     const {only, except} = options
     if(except){
       myPlugins = omit(myPlugins, except)
