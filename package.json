@@ -1,6 +1,6 @@
 {
   "name": "vuex-keg",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Change object key by key map",
   "author": "bichi",
   "main": "dist/app.js",
@@ -40,6 +40,7 @@
     "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-stage-1": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
@@ -75,7 +76,6 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.5"
   }
 }
