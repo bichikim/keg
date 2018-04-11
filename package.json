@@ -75,6 +75,7 @@
     "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.5"
   }
 }

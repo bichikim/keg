@@ -8,10 +8,11 @@
 const webpack = require('../../build/webpack.test.config.js')
 module.exports = function(config) {
   config.set({
-    browsers: ['ChromeWithoutSecurity'],
+    browsers: ['PhantomJS', 'ChromeWithoutSecurity'],
     frameworks: ['mocha', 'chai'],
     reporters: ['spec', 'coverage'],
     files: [
+      './../../node_modules/babel-polyfill/dist/polyfill.js',
       {pattern: '../../src/**/*.spec.js', watched: false},
       {pattern: './specs/**/*.spec.js', watched: false},
     ],

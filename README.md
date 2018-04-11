@@ -8,7 +8,7 @@
 [LICENSE IMAGE]:https://img.shields.io/npm/l/vuex-keg.svg
 [LICENSE LINK]:https://www.npmjs.org/package/vuex-keg
 
-> Vuex supporting custom util plugin.
+> supporting custom util plugin in Vuex.
 
 ## Installation
 ``
