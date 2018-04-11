@@ -45,7 +45,7 @@ export const keg = (
     const {rootState} = context
     let myPlugins: {[name: string]: TAgedPlugin} = rootState[sKeg]
     if(!myPlugins){
-      throw new Error('[vuex-keg] rootState is undefined at getting keg-plugin')
+      throw new Error('[vuex-keg] keg-plugin is undefined in rootState')
     }
     const {only, except} = options
     if(except){
