@@ -95,7 +95,7 @@ describe('Keg', () => {
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
       expect(receive.store).to.deep.equal(store)
-      expect(receive.store.state[sKeg]).to.be.an('object')
+      expect(receive.store[sKeg]).to.be.an('object')
       expect(receive.context.dispatch).to.equal(store.dispatch)
       expect(receive.context.commit).to.equal(store.commit)
       expect(receive.context.state).to.deep.equal(store.state)

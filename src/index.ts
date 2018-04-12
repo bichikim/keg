@@ -29,11 +29,7 @@ export default (options: IVuexKegOptions = {}) => {
   const myPlugins: IPlugins = {}
   Object.assign(myPlugins, plugins, beers)
   return (store: any = {}) => {
-    const {state} = store
-    if(!state){
-      throw new Error('[vuex-keg] rootState is undefined at registering keg-plugin')
-    }
-    store.state[sKeg] = _agePlugins(myPlugins, store)
+    store[sKeg] = _agePlugins(myPlugins, store)
   }
 }
 
@@ -41,9 +37,8 @@ export const keg = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
-  return (context, payload) => {
-    const {rootState} = context
-    let myPlugins: {[name: string]: TAgedPlugin} = rootState[sKeg]
+  return function(context, payload) {
+    let myPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
     if(!myPlugins){
       throw new Error('[vuex-keg] keg-plugin is undefined in rootState')
     }
