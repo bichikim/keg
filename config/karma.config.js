@@ -5,25 +5,25 @@
  * mocha, chai, karma-coverage
  * @author Bichi Kim <bichi@live.co.kr>
  */
-const webpack = require('../../build/webpack.test.config.js')
+const webpack = require('./webpack.test.config.js')
 module.exports = function(config) {
   config.set({
     browsers: ['PhantomJS', 'ChromeWithoutSecurity'],
     frameworks: ['mocha', 'chai'],
     reporters: ['spec', 'coverage'],
     files: [
-      './../../node_modules/babel-polyfill/dist/polyfill.js',
-      {pattern: '../../src/**/*.spec.js', watched: false},
-      {pattern: './specs/**/*.spec.js', watched: false},
+      '../node_modules/babel-polyfill/dist/polyfill.js',
+      {pattern: '../src/**/*.spec.js', watched: false},
+      {pattern: './test/specs/**/*.spec.js', watched: false},
     ],
     exclude: [
-      '../../src/**/*.spec.skip.js',
+      '../src/**/*.spec.skip.js',
     ],
     preprocessors: {
-      '../../src/**/*.js': ['webpack', 'sourcemap'],
-      '../../src/**/*.ts': ['webpack', 'sourcemap'],
-      './specs/**/*.js': ['webpack', 'sourcemap'],
-      './specs/**/*.ts': ['webpack', 'sourcemap'],
+      '../src/**/*.js': ['webpack', 'sourcemap'],
+      '../src/**/*.ts': ['webpack', 'sourcemap'],
+      '../test/specs/**/*.js': ['webpack', 'sourcemap'],
+      './test/specs/**/*.ts': ['webpack', 'sourcemap'],
     },
     coverageReporter: {
       dir: 'coverage/',
