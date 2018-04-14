@@ -19,10 +19,11 @@ npm i -S vuex-keg
 yarn add vuex-keg
 ``
 ## How to Register & Use this
-````javascript
+### Basic
+```javascript
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VuexKeg, {keg} from './index'
+import VuexKeg, {keg} from './'
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
@@ -39,13 +40,42 @@ const store = new Vuex.Store({
         justSayHi('foo')
         // do mutation
         commit('increase')
-      })
+      }),
     },
-    plugins: [VuexKeg({
-      plugins: {
-        justSayHi: (store) => (context) => (yourPrams) => (window.console.log('hi!', yourPrams)),
-      },
-    })],
-    })
+    plugins: [
+      VuexKeg({
+        plugins: {
+          justSayHi: (store) => (context) => (yourPrams) => (window.console.log('hi!', yourPrams)),
+        }
+      })
+    ],
+  }
+)
   // result console 'hi!, foo'
-````
+```
+### Create & Register Keg plugin
+```javascript
+import Vue from 'vue'
+import Vuex from 'vuex'
+import VuexKeg from './'
+
+const myPlugins = (pluginOptions) => (store) => {
+  // action context & action payload
+  return (context, payload) => {
+    return (...args) => {
+      console.log(`args: ${args}`)
+    }
+  }
+}
+
+const store = new Vuex.Store({
+      plugins: [
+        VuexKeg({
+          plugins: {
+            myPlugins: myPlugins({foo: true}),
+          }
+        })
+      ],
+})
+
+```
