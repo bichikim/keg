@@ -23,13 +23,13 @@ export interface IFnContext{
 
 export interface IVuexKegOptions {
   plugins?: IPlugins
-  beers?: IPlugins
+  beers?: IPlugins // = plugins
 }
 
 export interface IKegOptions {
   only?: string[]
   except?: string[]
-  when?: () => Promise<any>
+  // when?: () => Promise<any> next feather
 }
 
 export interface IPlugins {
