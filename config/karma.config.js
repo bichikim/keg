@@ -26,7 +26,7 @@ module.exports = function(config) {
       './test/specs/**/*.ts': ['webpack', 'sourcemap'],
     },
     coverageReporter: {
-      dir: 'coverage/',
+      dir: '../coverage/',
       reporters: [
         {type: 'html', subdir: 'html'},
         {type: 'lcovonly', subdir: 'lcov'},

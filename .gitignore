@@ -14,8 +14,9 @@ docs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-test/unit/coverage/
+coverage/
 debug.log*
+
 
 ## environment files
 yarn.lock
