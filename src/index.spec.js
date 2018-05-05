@@ -3,11 +3,78 @@ import vuexKeg, {keg, Keg, sKeg} from './index'
 import Vuex from 'vuex'
 import Vue from 'vue'
 
-describe('Keg', () => {
+describe('Keg', function() {
+  Vue.config.productionTip = false
+  Vue.config.devtools = false
   Vue.use(Vuex)
+  const plugins = [
+    vuexKeg({
+      plugins: {
+        test: (store) => {
+          return (context, payload) => {
+            return (prams) => {
+              receive = {
+                store,
+                context,
+                payload,
+                prams,
+              }
+            }
+          }
+        },
+        forExcept: (store) => {
+          return (context, payload) => {
+            return (prams) => {
+              receive = {
+                store,
+                context,
+                payload,
+                prams,
+              }
+            }
+          }
+        },
+      },
+      beers: {
+        forOnly: (store) => {
+          return (context, payload) => {
+            return (prams) => {
+              receive = {
+                store,
+                context,
+                payload,
+                prams,
+              }
+            }
+          }
+        },
+      }
+    })]
   let receive
   let receiveContext
   let store
+  const actions = {
+    test: (context) => {
+      receiveContext = context
+      const {test} = context
+      test('prams')
+    },
+    testOnly: (context) => {
+      receiveContext = context
+      const {forOnly} = context
+      forOnly('prams')
+    },
+    testExcept: (context) => {
+      receiveContext = context
+      const {test} = context
+      test('prams')
+    },
+    testExceptAndOnly: (context) => {
+      receiveContext = context
+      const {forOnly} = context
+      forOnly('prams')
+    }
+  }
 
   describe('keg', () => {
     beforeEach(() => {
@@ -20,75 +87,14 @@ describe('Keg', () => {
           value: 1,
         },
         actions: {
-          test: keg((context) => {
-            receiveContext = context
-            const {test} = context
-            test('prams')
-          }),
-          testOnly: keg((context) => {
-            receiveContext = context
-            const {forOnly} = context
-            forOnly('prams')
-          }, {
-            only: ['forOnly'],
-          }),
-          testExcept: keg((context) => {
-            receiveContext = context
-            const {test} = context
-            test('prams')
-          }, {
-            except: ['forExcept'],
-          }),
-          testExceptAndOnly: keg((context) => {
-            receiveContext = context
-            const {forOnly} = context
-            forOnly('prams')
-          }, {
-            only: ['forOnly'],
-            except: ['forExcept'],
+          test: keg(actions.test),
+          testOnly: keg(actions.testOnly, {only: ['forOnly']}),
+          testExcept: keg(actions.testExcept, {except: ['forExcept']}),
+          testExceptAndOnly: keg(actions.testExceptAndOnly, {
+            only: ['forOnly'], except: ['forExcept'],
           }),
         },
-        plugins: [
-          vuexKeg({
-            plugins: {
-              test: (store) => {
-                return (context, payload) => {
-                  return (prams) => {
-                    receive = {
-                      store,
-                      context,
-                      payload,
-                      prams,
-                    }
-                  }
-                }
-              },
-              forExcept: (store) => {
-                return (context, payload) => {
-                  return (prams) => {
-                    receive = {
-                      store,
-                      context,
-                      payload,
-                      prams,
-                    }
-                  }
-                }
-              },
-              forOnly: (store) => {
-                return (context, payload) => {
-                  return (prams) => {
-                    receive = {
-                      store,
-                      context,
-                      payload,
-                      prams,
-                    }
-                  }
-                }
-              },
-            },
-          })],
+        plugins,
       })
     })
     afterEach(() => {
@@ -141,78 +147,20 @@ describe('Keg', () => {
   describe('Keg class', () => {
     let keg
     const makeStore = (keg) => {
-
       store = new Vuex.Store({
         strict: true,
         state: {
           value: 1,
         },
         actions: {
-          test: keg.tap((context) => {
-            receiveContext = context
-            const {test} = context
-            test('prams')
-          }),
-          testOnly: keg.tap((context) => {
-            receiveContext = context
-            const {forOnly} = context
-            forOnly('prams')
-          }),
-          testExcept: keg.tap((context) => {
-            receiveContext = context
-            const {test} = context
-            test('prams')
-          }),
-          testExceptAndOnly: keg.tap((context) => {
-            receiveContext = context
-            const {forOnly} = context
-            forOnly('prams')
-          }, {
-            only: ['forOnly'],
-            except: ['forExcept'],
+          test: keg.tap(actions.test),
+          testOnly: keg.tap(actions.testOnly),
+          testExcept: keg.tap(actions.testExcept),
+          testExceptAndOnly: keg.tap(actions.testExceptAndOnly, {
+            only: ['forOnly'], except: ['forExcept'],
           }),
         },
-        plugins: [
-          vuexKeg({
-            plugins: {
-              test: (store) => {
-                return (context, payload) => {
-                  return (prams) => {
-                    receive = {
-                      store,
-                      context,
-                      payload,
-                      prams,
-                    }
-                  }
-                }
-              },
-              forExcept: (store) => {
-                return (context, payload) => {
-                  return (prams) => {
-                    receive = {
-                      store,
-                      context,
-                      payload,
-                      prams,
-                    }
-                  }
-                }
-              },
-              forOnly: (store) => {
-                return (context, payload) => {
-                  return (prams) => {
-                    receive = {
-                      store,
-                      context,
-                      payload,
-                      prams,
-                    }
-                  }
-                }
-              },
-            },
-          })],
+        plugins,
       })
     }
     beforeEach(() => {
@@ -307,5 +255,4 @@ describe('Keg', () => {
       })
     })
   })
-
 })

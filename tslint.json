@@ -19,6 +19,7 @@
       "trace"
     ],
     "no-construct": true,
+    "prefer-const": false,
     "no-debugger": true,
     "no-duplicate-variable": true,
     "no-empty": true,
@@ -33,6 +34,7 @@
     "no-use-before-declare": true,
     "quotemark": [true, "single"],
     "radix": true,
+    "only-arrow-functions": ["allow-named-functions"],
     "no-empty-interface": false,
     "no-string-throw": true,
     "semicolon": [true, "never"],
@@ -59,7 +61,7 @@
         "variable-declaration": "onespace"
       }
     ],
-    "max-classes-per-file": [true, 1],
+     "max-classes-per-file": [false, 1],
     "object-literal-sort-keys": false,
     "space-before-function-paren": [true, "never"],
     "brace-style": ["1tbs", {

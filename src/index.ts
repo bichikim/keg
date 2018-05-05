@@ -3,7 +3,7 @@ import {forEach, omit, pick} from 'lodash'
 import Keg from './Keg'
 import {
   IKegOptions, IPlugins, IVuexKegOptions, TAgedPlugin, TInjectedFunction,
-  IAgedPlugins, ActionHandler
+  IAgedPlugins, ActionHandler,
 } from './types'
 export {Keg}
 export const sKeg = Symbol('keg')
@@ -37,7 +37,7 @@ export const keg = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
-  return function(context, payload) {
+  return function kegTap(context, payload) {
     let myPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
     if(!myPlugins){
       throw new Error('[vuex-keg] keg-plugin is undefined in Store')
@@ -53,4 +53,3 @@ export const keg = (
     return injectedAction({...plugins, ...context}, payload)
   }
 }
-
