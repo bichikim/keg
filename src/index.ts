@@ -28,7 +28,7 @@ export default (options: IVuexKegOptions = {}) => {
   const {plugins = {}, beers = {}} = options
   const myPlugins: IPlugins = {}
   Object.assign(myPlugins, plugins, beers)
-  return (store: any = {}) => {
+  return (store: any) => {
     store[sKeg] = _agePlugins(myPlugins, store)
   }
 }

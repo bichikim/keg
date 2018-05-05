@@ -255,4 +255,63 @@ describe('Keg', function() {
       })
     })
   })
+
+  describe('keg errors', () => {
+    const store = new Vuex.Store({
+      strict: true,
+      state: {
+        value: 1,
+      },
+      actions: {
+        test: keg(actions.test),
+      },
+    })
+    it('can throw error when store has no keg-plugin', () => {
+      const error = () => {
+        store.dispatch('test', 'payload')
+      }
+      expect(error).to.throw('[vuex-keg] keg-plugin is undefined in Store')
+    })
+  })
+
+  describe('keg with out plugins', () => {
+    let result
+    it('can run well 1', () => {
+      const store = new Vuex.Store({
+        strict: true,
+        state: {
+          value: 1,
+        },
+        actions: {
+          test: keg(() => {
+            result = 'test'
+          }),
+        },
+        plugins: [
+          vuexKeg({})
+        ]
+      })
+      store.dispatch('test', 'payload')
+      expect(result).to.equal('test')
+    })
+    it('can run well 2', () => {
+      const store = new Vuex.Store({
+        strict: true,
+        state: {
+          value: 1,
+        },
+        actions: {
+          test: keg(() => {
+            result = 'test'
+          }),
+        },
+        plugins: [
+          vuexKeg()
+        ]
+      })
+      store.dispatch('test', 'payload')
+      expect(result).to.equal('test')
+    })
+  })
+
 })
