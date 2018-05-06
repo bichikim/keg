@@ -197,9 +197,7 @@ describe('Keg', function() {
       expect(receiveContext.forOnly).to.be.a('function')
     })
     it('can create an instance : only', () => {
-      keg = new Keg({
-        only: ['forOnly'],
-      })
+      keg = new Keg({only: ['forOnly']})
       makeStore(keg)
       store.dispatch('testOnly', 'payload')
       expect(receiveContext.test).to.be.an('undefined')
@@ -207,9 +205,7 @@ describe('Keg', function() {
       expect(receiveContext.forOnly).to.be.a('function')
     })
     it('can create an instance : except', () => {
-      keg = new Keg({
-        except: ['forExcept'],
-      })
+      keg = new Keg({except: ['forExcept']})
       makeStore(keg)
       store.dispatch('testExcept', 'payload')
       expect(receiveContext.test).to.be.a('function')
@@ -228,25 +224,17 @@ describe('Keg', function() {
       expect(receiveContext.forOnly).to.be.a('function')
     })
     it('can change default options', () => {
-      keg = new Keg({
-        only: ['forOnly'],
-        except: ['forExcept'],
-      })
+      keg = new Keg({only: ['forOnly'], except: ['forExcept']})
       makeStore(keg)
       // change options
-      keg.options = {
-        only: ['forOnly'],
-      }
+      keg.options = {only: ['forOnly']}
       store.dispatch('testOnly', 'payload')
       expect(receiveContext.test).to.be.an('undefined')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
     it('can get options', () => {
-      keg = new Keg({
-        only: ['forOnly'],
-        except: ['forExcept'],
-      })
+      keg = new Keg({only: ['forOnly'], except: ['forExcept']})
       makeStore(keg)
       store.dispatch('testOnly', 'payload')
       expect(keg.options).to.deep.equal({
@@ -256,40 +244,28 @@ describe('Keg', function() {
     })
   })
 
-  describe('keg errors', () => {
+  describe('keg without init keg plugins', () => {
     const store = new Vuex.Store({
       strict: true,
-      state: {
-        value: 1,
-      },
-      actions: {
-        test: keg(actions.test),
-      },
+      state: {value: 1},
+      actions: {test: keg(actions.test)},
     })
     it('can throw error when store has no keg-plugin', () => {
-      const error = () => {
-        store.dispatch('test', 'payload')
-      }
+      const error = () => {store.dispatch('test', 'payload')}
       expect(error).to.throw('[vuex-keg] keg-plugin is undefined in Store')
     })
   })
 
-  describe('keg with out plugins', () => {
+  describe('keg without plugins', () => {
     let result
     it('can run well 1', () => {
       const store = new Vuex.Store({
         strict: true,
-        state: {
-          value: 1,
-        },
+        state: {value: 1},
         actions: {
-          test: keg(() => {
-            result = 'test'
-          }),
+          test: keg(() => {result = 'test'}),
         },
-        plugins: [
-          vuexKeg({})
-        ]
+        plugins: [vuexKeg({})]
       })
       store.dispatch('test', 'payload')
       expect(result).to.equal('test')
@@ -297,21 +273,14 @@ describe('Keg', function() {
     it('can run well 2', () => {
       const store = new Vuex.Store({
         strict: true,
-        state: {
-          value: 1,
-        },
+        state: {value: 1},
         actions: {
-          test: keg(() => {
-            result = 'test'
-          }),
+          test: keg(() => {result = 'test'}),
         },
-        plugins: [
-          vuexKeg()
-        ]
+        plugins: [vuexKeg()]
       })
       store.dispatch('test', 'payload')
       expect(result).to.equal('test')
     })
   })
-
 })
