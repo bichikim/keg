@@ -33,7 +33,8 @@
     "types/**/*.d.ts"
   ],
   "exclude": [
-    "templates"
+    "templates",
+    "node_modules"
   ],
   "compileOnSave": false
 }

@@ -6,9 +6,9 @@
           "> 1%",
           "last 2 versions",
           "not ie <= 8"
-        ],
-        "modules": "umd"
-      }
+        ]
+      },
+      "modules": false
     }
   ], "stage-1", "stage-2", "stage-3"]
 }

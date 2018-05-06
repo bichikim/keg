@@ -1,5 +1,4 @@
 import {ActionHandler, IKegOptions, TInjectedFunction} from './types'
-import {clone} from 'lodash'
 import {keg} from './'
 
 export default class Keg {
@@ -22,6 +21,6 @@ export default class Keg {
   }
 
   get options() {
-    return clone(this._options)
+    return {...this._options}
   }
 }

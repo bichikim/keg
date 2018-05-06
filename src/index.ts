@@ -2,8 +2,13 @@ import {ActionContext, Store} from 'vuex/types'
 import {forEach, omit, pick} from 'lodash'
 import Keg from './Keg'
 import {
-  IKegOptions, IPlugins, IVuexKegOptions, TAgedPlugin, TInjectedFunction,
-  IAgedPlugins, ActionHandler,
+  IKegOptions,
+  IPlugins,
+  IVuexKegOptions,
+  TAgedPlugin,
+  TInjectedFunction,
+  IAgedPlugins,
+  ActionHandler,
 } from './types'
 export {Keg}
 export const sKeg = Symbol('keg')

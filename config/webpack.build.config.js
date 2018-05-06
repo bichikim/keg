@@ -10,4 +10,5 @@ module.exports = webpackMerge(WebpackBaseConfig, {
   },
   devtool: 'source-map',
   mode: 'production',
+  externals: ['lodash']
 })
