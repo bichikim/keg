@@ -8,6 +8,9 @@ import {
 export {Keg}
 export const sKeg = Symbol('keg')
 
+/**
+ * call plugins with store
+ */
 const _agePlugins = (plugins: IPlugins, store: Store<any>): {} => {
   const agedPlugins: IAgedPlugins = {}
   forEach(plugins, (plugin, key) => {
@@ -16,6 +19,9 @@ const _agePlugins = (plugins: IPlugins, store: Store<any>): {} => {
   return agedPlugins
 }
 
+/**
+ * call aged plugins with context and payload of an action
+ */
 const _openPlugins = (agedPlugins: {}, context: ActionContext<any, any>, payload: any) => {
   const openedPlugins: IPlugins = {}
   forEach(agedPlugins, (plugin, key) => {
@@ -24,6 +30,7 @@ const _openPlugins = (agedPlugins: {}, context: ActionContext<any, any>, payload
   return openedPlugins
 }
 
+// Vuex keg plugin
 export default (options: IVuexKegOptions = {}) => {
   const {plugins = {}, beers = {}} = options
   const myPlugins: IPlugins = {}
@@ -33,6 +40,7 @@ export default (options: IVuexKegOptions = {}) => {
   }
 }
 
+// Vuex custom utils container function
 export const keg = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
