@@ -1,5 +1,5 @@
 build/*.js
-config/*.js
+coverage/
 public/*.js
 dist/*.js
 _removed/*.js

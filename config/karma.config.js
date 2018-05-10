@@ -10,7 +10,7 @@ module.exports = function(config) {
   config.set({
     browsers: ['PhantomJS', 'ChromeWithoutSecurity'],
     frameworks: ['mocha', 'chai'],
-    reporters: ['spec', 'coverage'],
+    reporters: ['spec', 'coverage', 'remap-coverage'],
     files: [
       '../node_modules/babel-polyfill/dist/polyfill.js',
       {pattern: '../src/**/*.spec.js', watched: false},
@@ -26,13 +26,12 @@ module.exports = function(config) {
       './test/specs/**/*.ts': ['webpack', 'sourcemap'],
     },
     coverageReporter: {
-      dir: 'coverage/',
-      reporters: [
-        {type: 'html', subdir: 'html'},
-        {type: 'lcovonly', subdir: 'lcov'},
-        {type: 'cobertura', subdir: 'cobertura'},
-        {type: 'text-summary'},
-      ],
+      type: 'in-memory'
+    },
+    remapCoverageReporter: {
+      'text-summary': null,
+      html: './coverage/html',
+      cobertura: './coverage/cobertura.xml'
     },
     webpack,
     webpackMiddleware: {

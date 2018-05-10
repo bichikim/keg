@@ -2,6 +2,7 @@
 # Keg
 
 [![LICENSE][LICENSE IMAGE]][LICENSE LINK]
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
 
 [NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=flat
 [NPM LINK]:https://www.npmjs.org/package/vuex-keg

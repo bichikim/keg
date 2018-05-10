@@ -2,8 +2,13 @@ import {ActionContext, Store} from 'vuex/types'
 import {forEach, omit, pick} from 'lodash'
 import Keg from './Keg'
 import {
-  IKegOptions, IPlugins, IVuexKegOptions, TAgedPlugin, TInjectedFunction,
-  IAgedPlugins, ActionHandler
+  IKegOptions,
+  IPlugins,
+  IVuexKegOptions,
+  TAgedPlugin,
+  TInjectedFunction,
+  IAgedPlugins,
+  ActionHandler,
 } from './types'
 export {Keg}
 export const sKeg = Symbol('keg')
@@ -35,7 +40,7 @@ export default (options: IVuexKegOptions = {}) => {
   const {plugins = {}, beers = {}} = options
   const myPlugins: IPlugins = {}
   Object.assign(myPlugins, plugins, beers)
-  return (store: any = {}) => {
+  return (store: any) => {
     store[sKeg] = _agePlugins(myPlugins, store)
   }
 }
@@ -45,7 +50,7 @@ export const keg = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
-  return function(context, payload) {
+  return function kegTap(context, payload) {
     let myPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
     if(!myPlugins){
       throw new Error('[vuex-keg] keg-plugin is undefined in Store')
@@ -61,4 +66,3 @@ export const keg = (
     return injectedAction({...plugins, ...context}, payload)
   }
 }
-

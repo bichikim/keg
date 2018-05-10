@@ -9,7 +9,7 @@ export type TAgedPlugin = (context: ActionContext<any, any>, payload: any) => TO
 export type TInjectedFunction = (context: IFnContext, payload?: any) => any
 
 // since vuex not updated for this yet, I defined this
-export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any;
+export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any
 
 export interface IFnContext{
   dispatch: Dispatch
