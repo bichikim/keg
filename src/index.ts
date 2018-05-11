@@ -35,7 +35,9 @@ const _openPlugins = (agedPlugins: {}, context: ActionContext<any, any>, payload
   return openedPlugins
 }
 
-// Vuex keg plugin
+/**
+ * Vuex keg plugin
+ */
 export default (options: IVuexKegOptions = {}) => {
   const {plugins = {}, beers = {}} = options
   const myPlugins: IPlugins = {}
@@ -45,7 +47,9 @@ export default (options: IVuexKegOptions = {}) => {
   }
 }
 
-// Vuex custom utils container function
+/**
+ * Vuex custom utils container function
+ */
 export const keg = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
