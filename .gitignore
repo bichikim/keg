@@ -19,7 +19,7 @@ debug.log*
 
 
 ## environment files
-yarn.lock
+#yarn.lock
 package-lock.json
 .env
 
