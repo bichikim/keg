@@ -2,13 +2,6 @@
 # Keg
 
 [![LICENSE IMAGE]](https://www.npmjs.org/package/vuex-keg)
-
-
-![CircleCI](https://img.shields.io/circleci/project/github/bichikim/keg.svg?style=flat)
-
-![Coveralls github](https://img.shields.io/coveralls/github/bichikim/keg.svg?style=flat)
-
-
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
 ![CircleCI](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)
 
