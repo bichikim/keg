@@ -1,13 +1,22 @@
 ![intro](./media/intro.png)
 # Keg
 
-[![LICENSE][LICENSE IMAGE]][LICENSE LINK]
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
+[![LICENSE IMAGE]](https://www.npmjs.org/package/vuex-keg)
 
-[NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=flat
+
+![CircleCI](https://img.shields.io/circleci/project/github/bichikim/keg.svg?style=flat)
+
+![Coveralls github](https://img.shields.io/coveralls/github/bichikim/keg.svg?style=flat)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
+![CircleCI](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser.svg)
+
+[NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=shield
 [NPM LINK]:https://www.npmjs.org/package/vuex-keg
 [LICENSE IMAGE]:https://img.shields.io/npm/l/vuex-keg.svg
-[LICENSE LINK]:https://www.npmjs.org/package/vuex-keg
+[PASSING]:https://circleci.com/gh/bichikim/keg.svg?style=shield&circle-tokrn=15b2464ef42b873445eae4ea8ac5726365199a3a
+[PASSING LINK]: https://circleci.com/gh/bichikim/keg
 
 > supporting custom util plugin in Vuex.
 
