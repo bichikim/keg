@@ -168,8 +168,24 @@ describe('Keg', function() {
         plugins,
       })
     })
-    it('return object to map', () => {
+    it('return object to map 1', () => {
       store.dispatch('testOnly', 'payload')
+      expect(receive.payload).to.equal('payload')
+      expect(receive.prams).to.equal('prams')
+      expect(receiveContext.test).to.be.a('function')
+      expect(receiveContext.forOnly).to.be.a('function')
+      expect(receiveContext.forExcept).to.be.a('function')
+    })
+    it('return object to map 2', () => {
+      store.dispatch('testExcept', 'payload')
+      expect(receive.payload).to.equal('payload')
+      expect(receive.prams).to.equal('prams')
+      expect(receiveContext.test).to.be.a('function')
+      expect(receiveContext.forOnly).to.be.a('function')
+      expect(receiveContext.forExcept).to.be.a('function')
+    })
+    it('return object to map 3', () => {
+      store.dispatch('testExceptAndOnly', 'payload')
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
       expect(receiveContext.test).to.be.a('function')
