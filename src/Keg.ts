@@ -14,9 +14,9 @@ export default class Keg {
    * use custom utils
    */
   tap(
-    injectedAction: TInjectedFunction,
+    injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
     options: IKegOptions = {},
-  ): ActionHandler<any, any> {
+  ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> {
     const {_options} = this
     const {only = _options.only, except = _options.except} = options
     return keg(injectedAction, {only, except})

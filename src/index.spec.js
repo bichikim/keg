@@ -6,6 +6,7 @@ import Vue from 'vue'
 describe('Keg', function() {
   Vue.config.productionTip = false
   Vue.config.devtools = false
+  // just for skipping throwing error from Vuex
   Vue.use(Vuex)
   const plugins = [
     vuexKeg({
@@ -126,21 +127,54 @@ describe('Keg', function() {
       store.dispatch('testOnly', 'payload')
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
-      expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.test).to.be.an('undefined')
+      expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
     })
     it('can run a keg plugin: expect', () => {
       store.dispatch('testExcept', 'payload')
-      expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.test).to.be.a('function')
+      expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
     })
     it('can run a keg plugin: expect & only', () => {
       store.dispatch('testExceptAndOnly', 'payload')
-      expect(receiveContext.forOnly).to.be.a('function')
+
       expect(receiveContext.test).to.be.a('undefined')
+      expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
+    })
+  })
+
+  describe('keg mapping', () => {
+    beforeEach(() => {
+      receive = null
+      receiveContext = null
+      store = null
+      const {testOnly, testExcept, testExceptAndOnly} = actions
+      store = new Vuex.Store({
+        strict: true,
+        state: {
+          value: 1,
+        },
+        actions: {
+          test: keg(actions.test),
+          ...keg({
+            testOnly,
+            testExcept,
+            testExceptAndOnly,
+          }),
+        },
+        plugins,
+      })
+    })
+    it('return object to map', () => {
+      store.dispatch('testOnly', 'payload')
+      expect(receive.payload).to.equal('payload')
+      expect(receive.prams).to.equal('prams')
+      expect(receiveContext.test).to.be.a('function')
+      expect(receiveContext.forOnly).to.be.a('function')
+      expect(receiveContext.forExcept).to.be.a('function')
     })
   })
 

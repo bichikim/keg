@@ -75,7 +75,7 @@ export const kegRunner = (
 export const keg = (
   injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
   options: IKegOptions = {},
-) => {
+): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> => {
   if(typeof injectedAction === 'function'){
     return kegRunner(injectedAction, options)
   }
@@ -86,6 +86,5 @@ export const keg = (
     })
     return actions
   }
-
 }
 
