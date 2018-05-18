@@ -47,10 +47,11 @@ export default (options: IVuexKegOptions = {}) => {
   }
 }
 
+
 /**
  * Vuex custom utils container function
  */
-export const keg = (
+export const kegRunner = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
@@ -70,3 +71,21 @@ export const keg = (
     return injectedAction({...plugins, ...context}, payload)
   }
 }
+
+export const keg = (
+  injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
+  options: IKegOptions = {},
+) => {
+  if(typeof injectedAction === 'function'){
+    return kegRunner(injectedAction, options)
+  }
+  if(!Array.isArray(injectedAction) && typeof injectedAction === 'object'){
+    const actions: {[name: string]: ActionHandler<any, any>} = {}
+    Object.keys(injectedAction).forEach((key) => {
+      actions[key] = kegRunner(injectedAction[key], options)
+    })
+    return actions
+  }
+
+}
+
