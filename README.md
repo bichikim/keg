@@ -1,5 +1,5 @@
 ![intro](./media/intro.png)
-# Keg
+# Vuex Keg
 
 [![LICENSE IMAGE]](https://www.npmjs.org/package/vuex-keg)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
@@ -14,7 +14,10 @@
 [PASSING]:https://circleci.com/gh/bichikim/keg.svg?style=shield&circle-tokrn=15b2464ef42b873445eae4ea8ac5726365199a3a
 [PASSING LINK]: https://circleci.com/gh/bichikim/keg
 
-> supporting custom util plugin in Vuex.
+> Support custtom util in Vuex action
+
+### Using Redux? see redux-keg
+> 
 
 ## Installation
 ``
