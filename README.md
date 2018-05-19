@@ -112,29 +112,3 @@ const store = new Vuex.Store({
 )
   // result console 'hi!, foo'
 ```
-### Create & Register Keg plugin
-```javascript
-import Vue from 'vue'
-import Vuex from 'vuex'
-import VuexKeg from './'
-
-const myPlugins = (pluginOptions) => (store) => {
-  // action context & action payload
-  return (context, payload) => {
-    return (...args) => {
-      console.log(`args: ${args}`)
-    }
-  }
-}
-
-const store = new Vuex.Store({
-      plugins: [
-        VuexKeg({
-          plugins: {
-            myPlugins: myPlugins({foo: true}),
-          }
-        })
-      ],
-})
-
-```
