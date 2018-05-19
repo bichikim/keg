@@ -89,7 +89,7 @@ const store = new Vuex.Store({
       },
     },
     actions: {
-      IAmJustAction({commit}, payload) {
+      IAmJustAnAction({commit}, payload) {
         commit('increase')
       },
       doSayHum: keg(({justSay}, payload) => {
@@ -100,19 +100,19 @@ const store = new Vuex.Store({
       ...keg({
         doSayHi({justSay, commit}, payload) {
           // custom keg util
-          justSay('hi', 'foo')
+          justSay('Hi', 'foo')
           // do mutation
           commit('increase')
         },
         doSayHo: ({justSay, commit}, payload) => {
           // custom keg util
-          justSay('ho', 'foo')
+          justSay('Ho', 'foo')
           // do mutation
           commit('increase')
         },
         doSayHa: ({justSay, commit}, payload) => {
           // custom keg util
-          justSay('ha', 'foo')
+          justSay('Ha', 'foo')
           // do mutation
           commit('increase')
         },
