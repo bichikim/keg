@@ -15,7 +15,7 @@
 [PASSING]:https://circleci.com/gh/bichikim/keg.svg?style=shield&circle-tokrn=15b2464ef42b873445eae4ea8ac5726365199a3a
 [PASSING LINK]: https://circleci.com/gh/bichikim/keg
 
-> Using Redux? see redux-keg 
+> Using Redux? see redux-keg (working on it)
 
 ``
 $ npm i -S vuex-keg
