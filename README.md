@@ -69,7 +69,7 @@ const store = new Vuex.Store({
     plugins: [
       VuexKeg({
         plugins: {
-          justSay: (store) => (context) => (say, yourName) => (window.console.log(`${say}!`, yourName)),
+          justSay: (store) => (context, payload) => (say, yourName) => (window.console.log(`${say}!`, yourName)),
         }
       })
     ],
@@ -104,7 +104,7 @@ const store = new Vuex.Store({
     plugins: [
       VuexKeg({
         plugins: {
-          justSayHi: (store) => (context) => (yourPrams) => (window.console.log('hi!', yourPrams)),
+          justSayHi: (store) => (context, payload) => (yourPrams) => (window.console.log('hi!', yourPrams)),
         }
       })
     ],
