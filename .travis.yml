@@ -4,4 +4,4 @@ node_js:
 install:
   - npm install -g codecov
 after_success:
-  - report-coverage
+  - codecov
