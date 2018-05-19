@@ -26,7 +26,7 @@ $ yarn add vuex-keg
 ``
 
 ## Why Do I Need This?
-vuex context has only {dispatch, commit, state, getters, rootState, rootGetters}\
+Vuex context has only {dispatch, commit, state, getters, rootState, rootGetters}\
 Vuex-keg is a solution to add more **your functions** for vuex
 
 ## Why Should I Add More functions?
