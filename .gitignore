@@ -7,6 +7,9 @@ flow-typed/npm/
 public/
 #dist/
 
+## coveralls
+.coveralls.yml
+
 ## docs
 docs/
 

@@ -5,6 +5,7 @@
  * mocha, chai, karma-coverage
  * @author Bichi Kim <bichi@live.co.kr>
  */
+
 const webpack = require('./webpack.test.config.js')
 module.exports = function(config) {
   config.set({
@@ -30,6 +31,7 @@ module.exports = function(config) {
     },
     remapCoverageReporter: {
       'text-summary': null,
+      lcovonly: './coverage/lcov.info',
       html: './coverage/html',
       cobertura: './coverage/cobertura.xml'
     },
