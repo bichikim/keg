@@ -4,7 +4,7 @@
 [![LICENSE IMAGE]](https://www.npmjs.org/package/vuex-keg)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
 [![Build Status](https://travis-ci.org/bichikim/keg.svg?branch=master)](https://travis-ci.org/bichikim/keg)
-![Coveralls github](https://img.shields.io/coveralls/github/bichikim/keg.svg)
+[![Coverage Status](https://coveralls.io/repos/github/bichikim/keg/badge.svg?branch=master)](https://coveralls.io/github/bichikim/keg?branch=master)
 
 
 [NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=shield
