@@ -49,7 +49,7 @@ describe('Keg', function() {
             }
           }
         },
-      }
+      },
     })]
   let receive
   let receiveContext
@@ -74,7 +74,7 @@ describe('Keg', function() {
       receiveContext = context
       const {forOnly} = context
       forOnly('prams')
-    }
+    },
   }
 
   describe('keg', () => {
@@ -329,7 +329,7 @@ describe('Keg', function() {
         actions: {
           test: keg(() => {result = 'test'}),
         },
-        plugins: [vuexKeg({})]
+        plugins: [vuexKeg({})],
       })
       store.dispatch('test', 'payload')
       expect(result).to.equal('test')
@@ -341,7 +341,7 @@ describe('Keg', function() {
         actions: {
           test: keg(() => {result = 'test'}),
         },
-        plugins: [vuexKeg()]
+        plugins: [vuexKeg()],
       })
       store.dispatch('test', 'payload')
       expect(result).to.equal('test')

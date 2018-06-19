@@ -1,5 +1,5 @@
-import {ActionHandler, IKegOptions, TInjectedFunction} from './types'
 import {keg} from './'
+import {ActionHandler, IKegOptions, TInjectedFunction} from './types'
 
 /**
  * Vuex custom utils container class
@@ -32,7 +32,7 @@ export default class Keg {
   /**
    * get default options
    */
-  get options() {
+  get options(): IKegOptions {
     return {...this._options}
   }
 }

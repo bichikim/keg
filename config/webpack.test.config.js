@@ -18,11 +18,11 @@ module.exports = webpackMerge(WebpackBaseConfig, {
         use: {
           // for karma coverage
           loader: 'istanbul-instrumenter-loader',
-          options: {esModules: true}
+          options: {esModules: true},
         },
         enforce: 'post',
         exclude: /node_modules|\.spec\.js$/,
-      }
-    ]
-  }
+      },
+    ],
+  },
 })

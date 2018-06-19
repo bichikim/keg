@@ -1,24 +1,28 @@
-import {ActionContext, Store} from 'vuex/types'
 import {forEach, omit, pick} from 'lodash'
+import {ActionContext, Store} from 'vuex/types'
 import Keg from './Keg'
 import {
+  ActionHandler,
+  IAgedPlugins,
   IKegOptions,
+  IKegStore,
+  IOpenedPlugins,
   IPlugins,
   IVuexKegOptions,
+  sKeg,
   TAgedPlugin,
   TInjectedFunction,
-  IAgedPlugins,
-  ActionHandler,
+  TKegReturn,
+  TPlugin,
 } from './types'
-export {Keg}
-export const sKeg = Symbol('keg')
+export {Keg, sKeg}
 
 /**
  * call plugins with store
  */
-const _agePlugins = (plugins: IPlugins, store: Store<any>): {} => {
+const _agePlugins = (plugins: IPlugins, store: Store<any>): IAgedPlugins => {
   const agedPlugins: IAgedPlugins = {}
-  forEach(plugins, (plugin, key) => {
+  forEach(plugins, (plugin: TPlugin, key: string) => {
     agedPlugins[key] = plugin(store)
   })
   return agedPlugins
@@ -27,9 +31,13 @@ const _agePlugins = (plugins: IPlugins, store: Store<any>): {} => {
 /**
  * call aged plugins with context and payload of an action
  */
-const _openPlugins = (agedPlugins: {}, context: ActionContext<any, any>, payload: any) => {
-  const openedPlugins: IPlugins = {}
-  forEach(agedPlugins, (plugin, key) => {
+const _openPlugins = (
+  agedPlugins: IAgedPlugins,
+  context: ActionContext<any, any>,
+  payload: any,
+): IOpenedPlugins => {
+  const openedPlugins: IOpenedPlugins = {}
+  forEach(agedPlugins, (plugin: TAgedPlugin, key: string) => {
     openedPlugins[key] = plugin(context, payload)
   })
   return openedPlugins
@@ -38,15 +46,14 @@ const _openPlugins = (agedPlugins: {}, context: ActionContext<any, any>, payload
 /**
  * Vuex keg plugin
  */
-export default (options: IVuexKegOptions = {}) => {
+export default (options: IVuexKegOptions = {}): TKegReturn => {
   const {plugins = {}, beers = {}} = options
   const myPlugins: IPlugins = {}
   Object.assign(myPlugins, plugins, beers)
-  return (store: any) => {
+  return (store: IKegStore<any>) => {
     store[sKeg] = _agePlugins(myPlugins, store)
   }
 }
-
 
 /**
  * Vuex custom utils container function
@@ -74,7 +81,7 @@ export const kegRunner = (
 
 export const keg = (
   injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
-  options: IKegOptions,
+  options?: IKegOptions,
 ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> => {
   if(typeof injectedAction === 'function'){
     return kegRunner(injectedAction, options)
@@ -88,4 +95,3 @@ export const keg = (
   }
   throw new Error('[vuex-keg] only support object & function')
 }
-

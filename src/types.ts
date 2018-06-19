@@ -8,6 +8,8 @@ export type TAgedPlugin = (context: ActionContext<any, any>, payload: any) => TO
 
 export type TInjectedFunction = (context: IFnContext, payload?: any) => any
 
+export type TKegReturn = (store: IKegStore<any>) => void
+
 // since vuex not updated for this yet, I defined this
 export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any
 
@@ -20,6 +22,8 @@ export interface IFnContext{
   rootGetters: any
   [plugin: string]: TOpenedPlugin
 }
+
+export const sKeg = Symbol('keg')
 
 export interface IVuexKegOptions {
   plugins?: IPlugins
@@ -38,4 +42,12 @@ export interface IPlugins {
 
 export interface IAgedPlugins {
   [name: string]: TAgedPlugin
+}
+
+export interface IOpenedPlugins {
+  [name: string]: TOpenedPlugin
+}
+
+export interface IKegStore<T> extends Store<T>{
+  [sKeg]: IAgedPlugins
 }

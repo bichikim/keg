@@ -8,7 +8,7 @@ const resolve = function(dir) {
 module.exports = {
   target: 'node',
   entry: {
-    app: ['./src/index.ts']
+    app: ['./src/index.ts'],
   },
   output: {
     path: resolve('dist'),
@@ -21,7 +21,7 @@ module.exports = {
       '@': resolve('src'),
       '~': resolve('lib'),
       '@@': resolve('./'),
-      '~~': resolve('./')
+      '~~': resolve('./'),
     },
   },
   module: {
@@ -42,8 +42,8 @@ module.exports = {
           {
             loader: 'ts-loader',
             options: {
-              appendTsSuffixTo: [/\.vue$/]
-            }
+              appendTsSuffixTo: [/\.vue$/],
+            },
           },
         ],
       },
@@ -52,6 +52,6 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader',
       },
-    ]
+    ],
   },
 }
