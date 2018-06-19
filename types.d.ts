@@ -1,13 +1,14 @@
 import {ActionContext, Store} from 'vuex/types'
-import {Keg, sKeg, keg, kegRunner} from './src'
+import {Keg, keg, kegRunner, sKeg} from './src'
+import kegPlugin from './src'
 import {
+  ActionHandler,
+  IAgedPlugins,
   IKegOptions,
   IPlugins,
   IVuexKegOptions,
   TAgedPlugin,
   TInjectedFunction,
-  IAgedPlugins,
-  ActionHandler,
 } from './src/types'
 export {
   Keg,
@@ -24,3 +25,5 @@ export {
   IAgedPlugins,
   ActionHandler,
 }
+
+export default kegPlugin
