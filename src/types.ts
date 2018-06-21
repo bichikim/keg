@@ -4,7 +4,11 @@ export type TOpenedPlugin = (...any: any[]) => any
 
 export type TPlugin = (store: Store<any>) => TAgedPlugin
 
-export type TAgedPlugin = (context: ActionContext<any, any>, payload: any) => TOpenedPlugin
+export type TAgedPlugin = (
+  name: string,
+  context: ActionContext<any, any>,
+  payload: any,
+) => TOpenedPlugin
 
 export type TInjectedFunction = (context: IFnContext, payload?: any) => any
 

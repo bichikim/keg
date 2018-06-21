@@ -92,9 +92,10 @@ const store = new Vuex.Store({
       IAmJustAnAction({commit}, payload) {
         commit('increase')
       },
-      doSayHum: keg(({justSay}, payload) => {
-        justSay('Hum', 'foo')
-      }),
+      // won't support this anymore
+      // doSayHum: keg(({justSay}, payload) => {
+      //  justSay('Hum', 'foo')
+      // }),
       // New Feature 
       // Now keg can set many actions at ones
       ...keg({

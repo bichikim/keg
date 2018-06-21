@@ -33,12 +33,13 @@ const _agePlugins = (plugins: IPlugins, store: Store<any>): IAgedPlugins => {
  */
 const _openPlugins = (
   agedPlugins: IAgedPlugins,
+  name: string,
   context: ActionContext<any, any>,
   payload: any,
 ): IOpenedPlugins => {
   const openedPlugins: IOpenedPlugins = {}
   forEach(agedPlugins, (plugin: TAgedPlugin, key: string) => {
-    openedPlugins[key] = plugin(context, payload)
+    openedPlugins[key] = plugin(name, context, payload)
   })
   return openedPlugins
 }
@@ -59,6 +60,7 @@ export default (options: IVuexKegOptions = {}): TKegReturn => {
  * Vuex custom utils container function
  */
 export const kegRunner = (
+  name: string,
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
@@ -74,7 +76,7 @@ export const kegRunner = (
     if(only){
       myPlugins = pick(myPlugins, only)
     }
-    const plugins = _openPlugins(myPlugins, context, payload)
+    const plugins = _openPlugins(myPlugins, name, context, payload)
     return injectedAction({...plugins, ...context}, payload)
   }
 }
@@ -84,12 +86,13 @@ export const keg = (
   options?: IKegOptions,
 ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> => {
   if(typeof injectedAction === 'function'){
-    return kegRunner(injectedAction, options)
+    console.error('deprecated using like that')
+    return kegRunner('unknown', injectedAction, options)
   }
   if(!Array.isArray(injectedAction) && typeof injectedAction === 'object'){
     const actions: {[name: string]: ActionHandler<any, any>} = {}
     Object.keys(injectedAction).forEach((key) => {
-      actions[key] = kegRunner(injectedAction[key], options)
+      actions[key] = kegRunner(key, injectedAction[key], options)
     })
     return actions
   }
