@@ -92,7 +92,7 @@ const store = new Vuex.Store({
       IAmJustAnAction({commit}, payload) {
         commit('increase')
       },
-      // won't support this anymore
+      // won't support this anymore deprecated
       // doSayHum: keg(({justSay}, payload) => {
       //  justSay('Hum', 'foo')
       // }),

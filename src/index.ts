@@ -33,13 +33,12 @@ const _agePlugins = (plugins: IPlugins, store: Store<any>): IAgedPlugins => {
  */
 const _openPlugins = (
   agedPlugins: IAgedPlugins,
-  name: string,
   context: ActionContext<any, any>,
   payload: any,
 ): IOpenedPlugins => {
   const openedPlugins: IOpenedPlugins = {}
   forEach(agedPlugins, (plugin: TAgedPlugin, key: string) => {
-    openedPlugins[key] = plugin(name, context, payload)
+    openedPlugins[key] = plugin(context, payload)
   })
   return openedPlugins
 }
@@ -76,8 +75,9 @@ export const kegRunner = (
     if(only){
       myPlugins = pick(myPlugins, only)
     }
-    const plugins = _openPlugins(myPlugins, name, context, payload)
-    return injectedAction({...plugins, ...context}, payload)
+    const _context = {...context, name}
+    const plugins = _openPlugins(myPlugins, _context, payload)
+    return injectedAction({...plugins, ..._context}, payload)
   }
 }
 

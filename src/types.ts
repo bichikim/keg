@@ -5,12 +5,14 @@ export type TOpenedPlugin = (...any: any[]) => any
 export type TPlugin = (store: Store<any>) => TAgedPlugin
 
 export type TAgedPlugin = (
-  name: string,
   context: ActionContext<any, any>,
   payload: any,
 ) => TOpenedPlugin
 
-export type TInjectedFunction = (context: IFnContext, payload?: any) => any
+export type TInjectedFunction = (
+  context: IFnContext,
+  payload: any,
+) => any
 
 export type TKegReturn = (store: IKegStore<any>) => void
 
@@ -24,7 +26,8 @@ export interface IFnContext{
   getters: any
   rootState: any
   rootGetters: any
-  [plugin: string]: TOpenedPlugin
+  name: string
+  [plugin: string]: TOpenedPlugin | any
 }
 
 export const sKeg = Symbol('keg')
