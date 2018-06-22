@@ -1,4 +1,5 @@
 import {ActionContext, Commit, Dispatch, Store} from 'vuex'
+import {sKeg, sKegOptions} from './'
 
 export type TOpenedPlugin = (...any: any[]) => any
 
@@ -12,6 +13,7 @@ export type TAgedPlugin = (
 export type TInjectedFunction = (
   context: IFnContext,
   payload: any,
+  kegPayload?: any,
 ) => any
 
 export type TKegReturn = (store: IKegStore<any>) => void
@@ -30,16 +32,24 @@ export interface IFnContext{
   [plugin: string]: TOpenedPlugin | any
 }
 
-export const sKeg = Symbol('keg')
-
-export interface IVuexKegOptions {
+export interface IVuexKegOptions extends IResolveOptions{
   plugins?: IPlugins
   beers?: IPlugins // = plugins
+  // action?: boolean next feather
+}
+
+export interface IResolveOptions {
+  success?: string
+  failure?: string
+  mutation?: boolean
 }
 
 export interface IKegOptions {
   only?: string[]
   except?: string[]
+  mutation?: boolean
+  payload?: any
+  // action?: boolean next feather
   // when?: () => Promise<any> next feather
 }
 
@@ -52,9 +62,11 @@ export interface IAgedPlugins {
 }
 
 export interface IOpenedPlugins {
+  resolve?: TOpenedPlugin
   [name: string]: TOpenedPlugin
 }
 
 export interface IKegStore<T> extends Store<T>{
   [sKeg]: IAgedPlugins
+  [sKegOptions]: IResolveOptions
 }

@@ -1,6 +1,7 @@
 import {forEach, omit, pick} from 'lodash'
 import {ActionContext, Store} from 'vuex/types'
 import Keg from './Keg'
+import resolve from './resolve'
 import {
   ActionHandler,
   IAgedPlugins,
@@ -8,14 +9,16 @@ import {
   IKegStore,
   IOpenedPlugins,
   IPlugins,
+  IResolveOptions,
   IVuexKegOptions,
-  sKeg,
   TAgedPlugin,
   TInjectedFunction,
   TKegReturn,
   TPlugin,
 } from './types'
-export {Keg, sKeg}
+export const sKeg = Symbol('keg')
+export const sKegOptions = Symbol('kegOptions')
+export {Keg}
 
 /**
  * call plugins with store
@@ -47,11 +50,13 @@ const _openPlugins = (
  * Vuex keg plugin
  */
 export default (options: IVuexKegOptions = {}): TKegReturn => {
-  const {plugins = {}, beers = {}} = options
-  const myPlugins: IPlugins = {}
+  const {
+    plugins = {}, beers = {}, success, failure, ...otherOptions} = options
+  const myPlugins: IPlugins = {resolve: resolve({success, failure})}
   Object.assign(myPlugins, plugins, beers)
   return (store: IKegStore<any>) => {
     store[sKeg] = _agePlugins(myPlugins, store)
+    store[sKegOptions] = otherOptions
   }
 }
 
@@ -64,20 +69,29 @@ export const kegRunner = (
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
   return function kegTap(context, payload) {
-    let myPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
-    if(!myPlugins){
+    let kegPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
+    const kegOptions: IResolveOptions = this[sKegOptions]
+    if(!kegPlugins){
       throw new Error('[vuex-keg] keg-plugin is undefined in Store')
     }
-    const {only, except} = options
+    const {
+      only, except,
+      mutation = kegOptions.mutation,
+      payload: kegPayload,
+    } = options
     if(except){
-      myPlugins = omit(myPlugins, except)
+      kegPlugins = omit(kegPlugins, except)
     }
     if(only){
-      myPlugins = pick(myPlugins, only)
+      kegPlugins = pick(kegPlugins, only)
     }
     const _context = {...context, name}
-    const plugins = _openPlugins(myPlugins, _context, payload)
-    return injectedAction({...plugins, ..._context}, payload)
+    const plugins = _openPlugins(kegPlugins, _context, payload)
+    const result = injectedAction({...plugins, ..._context}, payload, kegPayload)
+    if(mutation){
+      plugins.resolve(result)
+    }
+    return result
   }
 }
 
