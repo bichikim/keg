@@ -51,12 +51,12 @@ const _openPlugins = (
  */
 export default (options: IVuexKegOptions = {}): TKegReturn => {
   const {
-    plugins = {}, beers = {}, success, failure, ...otherOptions} = options
+    plugins = {}, beers = {}, success, failure, mutation = false} = options
   const myPlugins: IPlugins = {resolve: resolve({success, failure})}
   Object.assign(myPlugins, plugins, beers)
   return (store: IKegStore<any>) => {
     store[sKeg] = _agePlugins(myPlugins, store)
-    store[sKegOptions] = otherOptions
+    store[sKegOptions] = {mutation}
   }
 }
 
