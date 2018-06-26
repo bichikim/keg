@@ -1,6 +1,6 @@
 ![intro](./media/intro.png)
 # Vuex Keg
-> Util container plugin for Vuex\
+> A container plugin for Vuex\
 
 [![LICENSE IMAGE]](https://www.npmjs.org/package/vuex-keg)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
