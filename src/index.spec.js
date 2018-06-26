@@ -418,7 +418,7 @@ describe('Keg', function() {
       store.dispatch('testNoReturn')
       expect(params).to.equal('hook')
     })
-    it('it should throw error in an error case 1', () => {
+    it('should throw error in an error case 1', () => {
       const store = new Vuex.Store({
         strict: true,
         state: {value: 1},
@@ -446,7 +446,7 @@ describe('Keg', function() {
         'hook string name should be a plugin name or the member name in action context'
       )
     })
-    it('it should throw error in an error case 2', () => {
+    it('should throw error in an error case 2', () => {
       const store = new Vuex.Store({
         strict: true,
         state: {value: 1},
