@@ -96,9 +96,10 @@ const store = new Vuex.Store({
       doSayHum: keg(({justSay, name}, payload) => {
         console.log(name) // => unknown
         justSay('Hum', 'foo')
+      }, {
+        // override a VuexKeg resultHooks option
+        resultHooks: 'justHook'
       }),
-      // New Feature 
-      // Now keg can set many actions at ones
       ...keg({
         doSayHi({justSay, commit, name}, payload) {
           console.log(name) // => doSayHi
@@ -124,8 +125,21 @@ const store = new Vuex.Store({
     plugins: [
       VuexKeg({
         plugins: {
-          justSay: (store) => (context, payload) => (say, yourName) => (window.console.log(`${say}!`, yourName)),
-        }
+          justSay: (store) => (context, payload) => (say, yourName) => (console.log(`${say}!`, yourName)),
+          justHook: (/*store*/) => (/*context payload*/) => (result) => {
+            console.log(result)
+            return result
+          },
+          justNextHook: () => () => (result) => {
+            console.log(result)
+            return result
+          }
+        },
+        // hook order list
+        resultHooks: ['justHook', 'justNextHook', ({commit}, result) => {
+          commit('increase')
+          return result
+        }]
       })
     ],
   }
