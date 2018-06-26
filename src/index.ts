@@ -66,11 +66,19 @@ const resultHookRunner = (
 ): any => {
   if(!result){return result}
   if(typeof hook === 'string'){
-    return context[hook](result)
+    const hookPlugin = context[hook]
+    if(hookPlugin){
+      return hookPlugin(result)
+    }
+    throw new Error(
+      '[vuex-keg] hook string name should be a plugin name or ' +
+      'the member name in action context',
+    )
   }
   if(typeof hook === 'function'){
     return hook(context, result)
   }
+  throw new Error('[vuex-keg] hook should be a function or string')
 }
 
 const resultHook = (
@@ -78,13 +86,13 @@ const resultHook = (
   hooks?: string | string[] | THook | THook[],
   result?: Promise<any>,
 ): any => {
-  if(!result || !hooks){return result}
+  if(!hooks){return result}
   if(Array.isArray(hooks)){
-    const results: any[] = []
+    let _result = result
     forEach(hooks, (hook: string | THook) => {
-      results.push(resultHookRunner(context, hook, result))
+      _result = resultHookRunner(context, hook, result)
     })
-    return results
+    return _result
   }
   return resultHookRunner(context, hooks, result)
 }
@@ -100,11 +108,8 @@ export const kegRunner = (
   return function kegTap(context, payload) {
     let kegPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
     let kegOptions = this[sKegOptions]
-    if(!kegPlugins){
-      throw new Error('[vuex-keg] keg-plugin is undefined in Store')
-    }
-    if(!kegOptions){
-      throw new Error('[vuex-keg] keg-options is undefined in Store')
+    if(!kegPlugins || !kegOptions){
+      throw new Error('[vuex-keg] keg-plugin | keg-options is undefined in Store')
     }
     const {only, except, resultHooks = kegOptions.resultHooks} = options
     if(except){

@@ -302,7 +302,7 @@ describe('Keg', function() {
     })
     it('should throw error when store has no keg-plugin', () => {
       const error = () => {store.dispatch('test', 'payload')}
-      expect(error).to.throw('[vuex-keg] keg-plugin is undefined in Store')
+      expect(error).to.throw('[vuex-keg] keg-plugin | keg-options is undefined in Store')
     })
   })
 
@@ -375,7 +375,7 @@ describe('Keg', function() {
       expect(params).to.equal('hook')
     })
     it('should use result function & named hooks for result', () => {
-      let params
+      let params = 'dumy'
       let funcContext
       let funcParams
       const store = new Vuex.Store({
@@ -386,6 +386,15 @@ describe('Keg', function() {
             test() {
               return 'hook'
             },
+            testNoReturn() {
+              // nothing
+            },
+          }, {
+            resultHooks: ['testHook', (context, _prams) => {
+              funcContext = context
+              funcParams = _prams
+              return _prams
+            }],
           }),
         },
         plugins: [vuexKeg({
@@ -395,11 +404,6 @@ describe('Keg', function() {
               return _prams
             },
           },
-          resultHooks: ['testHook', (context, _prams) => {
-            funcContext = context
-            funcParams = _prams
-            return _prams
-          }],
         })],
       })
       store.dispatch('test')
@@ -411,6 +415,64 @@ describe('Keg', function() {
       expect(funcContext.getters).to.be.a('object')
       expect(funcParams).to.equal('hook')
       expect(params).to.equal('hook')
+      store.dispatch('testNoReturn')
+      expect(params).to.equal('hook')
+    })
+    it('it should throw error in an error case 1', () => {
+      const store = new Vuex.Store({
+        strict: true,
+        state: {value: 1},
+        actions: {
+          ...keg({
+            test() {
+              return 'hook'
+            },
+          }, {
+
+          }),
+        },
+        plugins: [vuexKeg({
+          plugins: {
+            testHook: () => () => (_prams) => {
+              params = _prams
+              return _prams
+            },
+          },
+          resultHooks: 'unknownTestHook',
+        })],
+      })
+      const error = () => (store.dispatch('test'))
+      expect(error).to.throw(
+        'hook string name should be a plugin name or the member name in action context'
+      )
+    })
+    it('it should throw error in an error case 2', () => {
+      const store = new Vuex.Store({
+        strict: true,
+        state: {value: 1},
+        actions: {
+          ...keg({
+            test() {
+              return 'hook'
+            },
+          }, {
+
+          }),
+        },
+        plugins: [vuexKeg({
+          plugins: {
+            testHook: () => () => (_prams) => {
+              params = _prams
+              return _prams
+            },
+          },
+          resultHooks: 34,
+        })],
+      })
+      const error = () => (store.dispatch('test'))
+      expect(error).to.throw(
+        'hook should be a function or string'
+      )
     })
   })
 })
