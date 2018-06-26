@@ -92,14 +92,16 @@ const store = new Vuex.Store({
       IAmJustAnAction({commit}, payload) {
         commit('increase')
       },
-      // won't support this anymore deprecated
-      // doSayHum: keg(({justSay}, payload) => {
-      //  justSay('Hum', 'foo')
-      // }),
+      // won't support context.name in this case 
+      doSayHum: keg(({justSay, name}, payload) => {
+        console.log(name) // => unknown
+        justSay('Hum', 'foo')
+      }),
       // New Feature 
       // Now keg can set many actions at ones
       ...keg({
-        doSayHi({justSay, commit}, payload) {
+        doSayHi({justSay, commit, name}, payload) {
+          console.log(name) // => doSayHi
           // custom keg util
           justSay('Hi', 'foo')
           // do mutation

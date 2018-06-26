@@ -31,15 +31,22 @@ export interface IFnContext{
 }
 
 export const sKeg = Symbol('keg')
+export const sKegOptions = Symbol('keg-options')
+
+export type THook = (context: IFnContext, payload: any) => any
+
+export type TResultHooks = string | string[] | THook | THook[]
 
 export interface IVuexKegOptions {
   plugins?: IPlugins
   beers?: IPlugins // = plugins
+  resultHooks?: TResultHooks
 }
 
 export interface IKegOptions {
   only?: string[]
   except?: string[]
+  resultHooks?: TResultHooks
   // when?: () => Promise<any> next feather
 }
 
@@ -57,4 +64,7 @@ export interface IOpenedPlugins {
 
 export interface IKegStore<T> extends Store<T>{
   [sKeg]: IAgedPlugins
+  [sKegOptions]: {
+    resultHooks: TResultHooks,
+  }
 }

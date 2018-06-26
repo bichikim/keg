@@ -1,5 +1,5 @@
 import {ActionContext, Store} from 'vuex/types'
-import {Keg, keg, kegRunner, sKeg} from './src'
+import {Keg, keg, kegRunner, sKeg, sKegOptions} from './src'
 import kegPlugin from './src'
 import {
   ActionHandler,
@@ -13,6 +13,7 @@ import {
 export {
   Keg,
   sKeg,
+  sKegOptions,
   keg,
   kegRunner,
   ActionContext,
@@ -26,4 +27,5 @@ export {
   ActionHandler,
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default kegPlugin

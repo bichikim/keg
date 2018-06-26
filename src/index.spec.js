@@ -347,4 +347,70 @@ describe('Keg', function() {
       expect(result).to.equal('test')
     })
   })
+  
+  describe('keg with result a named hook', () => {
+    it('should use result hooks for result', () => {
+      let params
+      const store = new Vuex.Store({
+        strict: true,
+        state: {value: 1},
+        actions: {
+          ...keg({
+            test() {
+              return 'hook'
+            },
+          }),
+        },
+        plugins: [vuexKeg({
+          plugins: {
+            testHook: () => () => (_prams) => {
+              params = _prams
+              return _prams
+            },
+          },
+          resultHooks: 'testHook',
+        })],
+      })
+      store.dispatch('test')
+      expect(params).to.equal('hook')
+    })
+    it('should use result function & named hooks for result', () => {
+      let params
+      let funcContext
+      let funcParams
+      const store = new Vuex.Store({
+        strict: true,
+        state: {value: 1},
+        actions: {
+          ...keg({
+            test() {
+              return 'hook'
+            },
+          }),
+        },
+        plugins: [vuexKeg({
+          plugins: {
+            testHook: () => () => (_prams) => {
+              params = _prams
+              return _prams
+            },
+          },
+          resultHooks: ['testHook', (context, _prams) => {
+            funcContext = context
+            funcParams = _prams
+            return _prams
+          }],
+        })],
+      })
+      store.dispatch('test')
+      expect(funcContext.testHook).to.be.a('function')
+      expect(funcContext.dispatch).to.be.a('function')
+      expect(funcContext.commit).to.be.a('function')
+      expect(funcContext.rootState).to.be.a('object')
+      expect(funcContext.state).to.be.a('object')
+      expect(funcContext.getters).to.be.a('object')
+      expect(funcParams).to.equal('hook')
+      expect(params).to.equal('hook')
+    })
+  })
 })

@@ -4,18 +4,21 @@ import Keg from './Keg'
 import {
   ActionHandler,
   IAgedPlugins,
+  IFnContext,
   IKegOptions,
   IKegStore,
   IOpenedPlugins,
   IPlugins,
   IVuexKegOptions,
   sKeg,
+  sKegOptions,
   TAgedPlugin,
+  THook,
   TInjectedFunction,
   TKegReturn,
   TPlugin,
 } from './types'
-export {Keg, sKeg}
+export {Keg, sKeg, sKegOptions}
 
 /**
  * call plugins with store
@@ -47,12 +50,43 @@ const _openPlugins = (
  * Vuex keg plugin
  */
 export default (options: IVuexKegOptions = {}): TKegReturn => {
-  const {plugins = {}, beers = {}} = options
+  const {plugins = {}, beers = {}, resultHooks} = options
   const myPlugins: IPlugins = {}
   Object.assign(myPlugins, plugins, beers)
   return (store: IKegStore<any>) => {
     store[sKeg] = _agePlugins(myPlugins, store)
+    store[sKegOptions] = {resultHooks}
   }
+}
+
+const resultHookRunner = (
+  context: IFnContext,
+  hook: string | THook,
+  result?: Promise<any>,
+): any => {
+  if(!result){return result}
+  if(typeof hook === 'string'){
+    return context[hook](result)
+  }
+  if(typeof hook === 'function'){
+    return hook(context, result)
+  }
+}
+
+const resultHook = (
+  context: IFnContext,
+  hooks?: string | string[] | THook | THook[],
+  result?: Promise<any>,
+): any => {
+  if(!result || !hooks){return result}
+  if(Array.isArray(hooks)){
+    const results: any[] = []
+    forEach(hooks, (hook: string | THook) => {
+      results.push(resultHookRunner(context, hook, result))
+    })
+    return results
+  }
+  return resultHookRunner(context, hooks, result)
 }
 
 /**
@@ -64,20 +98,25 @@ export const kegRunner = (
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
   return function kegTap(context, payload) {
-    let myPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
-    if(!myPlugins){
+    let kegPlugins: {[name: string]: TAgedPlugin} = this[sKeg]
+    let kegOptions = this[sKegOptions]
+    if(!kegPlugins){
       throw new Error('[vuex-keg] keg-plugin is undefined in Store')
     }
-    const {only, except} = options
+    if(!kegOptions){
+      throw new Error('[vuex-keg] keg-options is undefined in Store')
+    }
+    const {only, except, resultHooks = kegOptions.resultHooks} = options
     if(except){
-      myPlugins = omit(myPlugins, except)
+      kegPlugins = omit(kegPlugins, except)
     }
     if(only){
-      myPlugins = pick(myPlugins, only)
+      kegPlugins = pick(kegPlugins, only)
     }
     const _context = {...context, name}
-    const plugins = _openPlugins(myPlugins, _context, payload)
-    return injectedAction({...plugins, ..._context}, payload)
+    const plugins = _openPlugins(kegPlugins, _context, payload)
+    const actionContext = {...plugins, ..._context}
+    return resultHook(actionContext, resultHooks, injectedAction(actionContext, payload))
   }
 }
 
@@ -86,13 +125,12 @@ export const keg = (
   options?: IKegOptions,
 ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> => {
   if(typeof injectedAction === 'function'){
-    console.error('deprecated using like that')
     return kegRunner('unknown', injectedAction, options)
   }
   if(!Array.isArray(injectedAction) && typeof injectedAction === 'object'){
     const actions: {[name: string]: ActionHandler<any, any>} = {}
-    Object.keys(injectedAction).forEach((key) => {
-      actions[key] = kegRunner(key, injectedAction[key], options)
+    Object.keys(injectedAction).forEach((pluginName) => {
+      actions[pluginName] = kegRunner(pluginName, injectedAction[pluginName], options)
     })
     return actions
   }
