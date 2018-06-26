@@ -10,9 +10,8 @@ export default class Keg {
     this._options = options
   }
 
-  /**
-   * use custom utils
-   */
+  // use custom utils
+  //noinspection JSUnusedGlobalSymbols
   tap(
     injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
     options: IKegOptions = {},
