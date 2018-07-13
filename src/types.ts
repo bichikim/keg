@@ -1,5 +1,6 @@
 import {ActionContext, Commit, Dispatch, Store} from 'vuex'
 import {sKeg, sKegOptions} from './'
+import {IResolveOptions} from './resolve'
 
 export type TOpenedPlugin = (...any: any[]) => any
 
@@ -8,6 +9,7 @@ export type TPlugin = (store: Store<any>) => TAgedPlugin
 export type TAgedPlugin = (
   context: ActionContext<any, any>,
   payload: any,
+  pluginOptions?: any,
 ) => TOpenedPlugin
 
 export type TInjectedFunction = (
@@ -32,25 +34,23 @@ export interface IFnContext{
   [plugin: string]: TOpenedPlugin | any
 }
 
-export interface IVuexKegOptions extends IResolveOptions{
-  plugins?: IPlugins
-  beers?: IPlugins // = plugins
-  // action?: boolean next feather
-}
-
-export interface IResolveOptions {
-  success?: string
-  failure?: string
-  mutation?: boolean
+export interface IPluginRunTimeOptions {
+  [name: string]: any
 }
 
 export interface IKegOptions {
   only?: string[]
   except?: string[]
-  mutation?: boolean
+  resolve?: boolean | IResolveOptions
+  pluginOptions?: IPluginRunTimeOptions
   payload?: any
-  // action?: boolean next feather
   // when?: () => Promise<any> next feather
+}
+
+export interface IVuexKegOptions extends IKegOptions{
+  plugins?: IPlugins
+  beers?: IPlugins // = plugins
+  pluginOptions?: null // no item
 }
 
 export interface IPlugins {
@@ -68,5 +68,5 @@ export interface IOpenedPlugins {
 
 export interface IKegStore<T> extends Store<T>{
   [sKeg]: IAgedPlugins
-  [sKegOptions]: IResolveOptions
+  [sKegOptions]: IKegOptions
 }

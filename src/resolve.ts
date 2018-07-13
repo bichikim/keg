@@ -1,14 +1,12 @@
-interface IOptions extends IRunningOptions{
+type TResolveOptionItem = string | boolean | ((name: string) => string)
 
-}
-interface IRunningOptions {
-  success?: string
-  failure?: string
-  promise?: boolean
+export interface IResolveOptions {
+  success?: TResolveOptionItem
+  failure?: TResolveOptionItem
 }
 
-const kegResolve = (options: IOptions = {}) => () => {
-  const {success = 'Success', failure = 'Failure'} = options
+const kegResolve = (options: IResolveOptions | boolean = {}) => () => {
+  const {success = 'Success', failure = 'Failure'} = typeof options === 'boolean' ? {} : options
   return (context: any) => {
     return (resolve: Promise<any>, runOptions: IRunningOptions = {}): Promise<any> => {
       const run = (outResolve?: any, outReject?: any) => {
