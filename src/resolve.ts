@@ -5,27 +5,26 @@ export interface IResolveOptions {
   failure?: TResolveOptionItem
 }
 
-const kegResolve = (options: IResolveOptions | boolean = {}) => () => {
-  const {success = 'Success', failure = 'Failure'} = typeof options === 'boolean' ? {} : options
+const kegResolve = (options: IResolveOptions | boolean) => () => {
+  const {
+    success = 'Success', failure = 'Failure',
+  } = typeof options === 'boolean' ? {} : typeof options === 'undefined' ? {} : options
   return (context: any) => {
-    return (resolve: Promise<any>, runOptions: IRunningOptions = {}): Promise<any> => {
-      const run = (outResolve?: any, outReject?: any) => {
+    return (resolve: Promise<any>, runOptions: boolean | IResolveOptions): Promise<any> => {
+      if(!options && !runOptions){return}
+      const {
+        success: _success = success,
+        failure: _failure = failure,
+      } = typeof runOptions === 'boolean' ? {} : runOptions
+      return new Promise((outResolve?: any, outReject?: any) => {
         resolve.then((result) => {
-          context.commit(`${context.name}${success}`, result)
-          if(outResolve){
-            outResolve(result)
-          }
+          context.commit(`${context.name}${_success}`, result)
+          outResolve(result)
         }).catch((error) => {
-          context.commit(`${context.name}${failure}`, error)
-          if(outReject){
-            outReject(error)
-          }
+          context.commit(`${context.name}${_failure}`, error)
+          outReject(error)
         })
-      }
-      if(runOptions.promise || options.promise){
-        return new Promise(run)
-      }
-      run()
+      })
     }
   }
 }

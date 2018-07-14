@@ -41,6 +41,7 @@ export interface IPluginRunTimeOptions {
 export interface IKegOptions {
   only?: string[]
   except?: string[]
+  shouldHave?: string[]
   resolve?: boolean | IResolveOptions
   pluginOptions?: IPluginRunTimeOptions
   payload?: any

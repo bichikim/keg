@@ -8,6 +8,11 @@ describe('Keg', function() {
   Vue.config.devtools = false
   // just for skipping throwing error from Vuex
   Vue.use(Vuex)
+  let receive
+  let receiveContext
+  let receiveTestSuccess
+  let receiveTestFailure
+  let store
   const plugins = [
     vuexKeg({
       plugins: {
@@ -35,6 +40,19 @@ describe('Keg', function() {
             }
           }
         },
+        forRunTimePluginOptions: (store) => {
+          return (context, payload, runtimeOptions) => {
+            return (prams) => {
+              receive = {
+                store,
+                context,
+                payload,
+                prams,
+                runtimeOptions,
+              }
+            }
+          }
+        },
       },
       beers: {
         forOnly: (store) => {
@@ -51,9 +69,6 @@ describe('Keg', function() {
         },
       },
     })]
-  let receive
-  let receiveContext
-  let store
   const actions = {
     test: (context) => {
       receiveContext = context
@@ -75,6 +90,18 @@ describe('Keg', function() {
       const {forOnly} = context
       forOnly('prams')
     },
+    testResolveSuccess: (context) => {
+      receiveContext = context
+      const {test} = context
+      test('prams')
+      return Promise.resolve('success')
+    },
+    testResolveFailure: (context) => {
+      receiveContext = context
+      const {test} = context
+      test('prams')
+      return Promise.reject('failure')
+    },
   }
 
   describe('keg', () => {
@@ -94,7 +121,11 @@ describe('Keg', function() {
           testExceptAndOnly: keg(actions.testExceptAndOnly, {
             only: ['forOnly'], except: ['forExcept'],
           }),
+          testExceptOnlyAndShouldHave: keg(actions.test, {
+            only: ['forOnly'], except: ['forExcept'], shouldHave: ['test'],
+          }),
         },
+
         plugins,
       })
     })
@@ -121,7 +152,6 @@ describe('Keg', function() {
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forExcept).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
-
     })
     it('should run a keg plugin: only', () => {
       store.dispatch('testOnly', 'payload')
@@ -139,8 +169,13 @@ describe('Keg', function() {
     })
     it('should run a keg plugin: expect & only', () => {
       store.dispatch('testExceptAndOnly', 'payload')
-
       expect(receiveContext.test).to.be.a('undefined')
+      expect(receiveContext.forOnly).to.be.a('function')
+      expect(receiveContext.forExcept).to.be.an('undefined')
+    })
+    it('should run a keg plugin: expect & only & shouldHave', () => {
+      store.dispatch('testExceptOnlyAndShouldHave', 'payload')
+      expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
     })
@@ -193,7 +228,9 @@ describe('Keg', function() {
       expect(receiveContext.forExcept).to.be.a('function')
     })
   })
-
+  /*********************************
+   * Keg class
+   ********************************/
   describe('Keg class', () => {
     let keg
     const makeStore = (keg) => {
@@ -209,6 +246,17 @@ describe('Keg', function() {
           testExceptAndOnly: keg.tap(actions.testExceptAndOnly, {
             only: ['forOnly'], except: ['forExcept'],
           }),
+          testResolveSuccess: keg.tap(actions.testResolveSuccess, {}, 'test'),
+          testResolveFailure: keg.tap(actions.testResolveFailure, {}, 'test'),
+        },
+        mutations: {
+          testFailure(state, payload) {
+            console.log('dd', payload)
+            receiveTestFailure = payload
+          },
+          testSuccess(state, payload) {
+            receiveTestSuccess = payload
+          },
         },
         plugins,
       })
@@ -217,6 +265,8 @@ describe('Keg', function() {
       receive = null
       receiveContext = null
       store = null
+      receiveTestSuccess = null
+      receiveTestFailure = null
     })
     afterEach('instance as members', () => {
       expect(keg).to.be.an('object')
@@ -272,6 +322,45 @@ describe('Keg', function() {
       expect(receiveContext.test).to.be.a('undefined')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
+    })
+    it('should create an instance : only & except & shouldHave', () => {
+      keg = new Keg({
+        only: ['forOnly'],
+        except: ['forExcept'],
+        shouldHave: ['test'],
+      })
+      makeStore(keg)
+      store.dispatch('testOnly', 'payload')
+      expect(receiveContext.test).to.be.a('function')
+      expect(receiveContext.forExcept).to.be.an('undefined')
+      expect(receiveContext.forOnly).to.be.a('function')
+    })
+    it('should create an instance : resolve success', (done) => {
+      keg = new Keg({
+        resolve: true,
+      })
+      makeStore(keg)
+      const promise = store.dispatch('testResolveSuccess', 'payload')
+      promise.then(() => {
+        expect(receiveTestSuccess).to.equal('success')
+        done()
+      }).catch((e) => {
+        done(e)
+      })
+    })
+    it('should create an instance : resolve failure', (done) => {
+      keg = new Keg({
+        resolve: true,
+      })
+      makeStore(keg)
+      const promise = store.dispatch('testResolveFailure', 'payload')
+      promise.catch(() => {
+        console.log('receiveTestFailure', receiveTestFailure)
+        expect(receiveTestFailure).to.equal('failure')
+        done()
+      }).catch((e) => {
+        done(e)
+      })
     })
     it('can change default options', () => {
       keg = new Keg({only: ['forOnly'], except: ['forExcept']})
