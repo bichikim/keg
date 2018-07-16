@@ -117,13 +117,32 @@ const store = new Vuex.Store({
           // do mutation
           commit('increase')
         },
+      }, {
+         pluginOptions: {
+           justSay: 'anyOptions' // now Keg can send options for plugins
+         }
+      }),
+      // now Keg can hook of an Action before the Action is run or after the Action is run [^1.2.1]
+      ...keg({
+        hookTest: (context, payload) => {
+          console.log(payload) // 'brforeHook/[payload]'
+          return payload
+        } // action result is 'afterHook/brforeHook/[payload]'
+      }, {
+        // shouldHave: ... // ignore except/ only options
+        beforeAction: ['beforeHook'], // can be array, It will run all plugins orderly
+        afterAction: 'afterHook', // can be string
       })
     },
     plugins: [
       VuexKeg({
         plugins: {
-          justSay: (store) => (context, payload) => (say, yourName) => (window.console.log(`${say}!`, yourName)),
-        }
+          justSay: (store) => (context, payload, options) => (say, yourName) => (window.console.log(`${say}!`, yourName, options)),
+          beforeHook: (store) => (context, payload) => (param /*payload*/) => (`beforeHook/${param}`),
+          afterHook: (store) => (context, payload) => (param /*result*/) => (`afterHook/${param}`)
+        },
+        // beforeAction: ...
+        // afterAction: ...
       })
     ],
   }

@@ -63,7 +63,6 @@ export interface IAgedPlugins {
 }
 
 export interface IOpenedPlugins {
-  resolve?: TOpenedPlugin
   [name: string]: TOpenedPlugin
 }
 
