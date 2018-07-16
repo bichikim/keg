@@ -101,6 +101,9 @@ describe('Keg', function() {
       const {test} = context
       test('prams')
       return Promise.reject('failure')
+      // return new Promise((r, j) => {
+      //   j('failure')
+      // })
     },
   }
 
@@ -251,7 +254,6 @@ describe('Keg', function() {
         },
         mutations: {
           testFailure(state, payload) {
-            console.log('dd', payload)
             receiveTestFailure = payload
           },
           testSuccess(state, payload) {
@@ -354,12 +356,11 @@ describe('Keg', function() {
       })
       makeStore(keg)
       const promise = store.dispatch('testResolveFailure', 'payload')
-      promise.catch(() => {
-        console.log('receiveTestFailure', receiveTestFailure)
+      promise.then(() => {
+        done('then')
+      }).catch(() => {
         expect(receiveTestFailure).to.equal('failure')
         done()
-      }).catch((e) => {
-        done(e)
       })
     })
     it('can change default options', () => {
