@@ -92,10 +92,10 @@ const store = new Vuex.Store({
       IAmJustAnAction({commit}, payload) {
         commit('increase')
       },
-      // won't support this anymore deprecated
-      // doSayHum: keg(({justSay}, payload) => {
-      //  justSay('Hum', 'foo')
-      // }),
+      // support single runing with a name parm
+      doSayHum: keg(({justSay}, payload) => {
+        justSay('Hum', 'foo')
+      }, {}, 'doSayHum'),
       // New Feature 
       // Now keg can set many actions at ones
       ...keg({
