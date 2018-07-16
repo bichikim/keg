@@ -1,7 +1,6 @@
 import {forEach, omit, pick} from 'lodash'
 import {ActionContext, Store} from 'vuex/types'
 import Keg from './Keg'
-import resolve from './resolve'
 import {
   ActionHandler,
   IAgedPlugins,
@@ -19,7 +18,6 @@ import {
 export const sKeg = Symbol('keg')
 export const sKegOptions = Symbol('kegOptions')
 export {Keg}
-const specialPlugins: string[] = []
 
 /**
  * call plugins with store
@@ -77,23 +75,35 @@ const filterPlugins = (
       filteredPlugins[key] = plugins[key]
     }
   }
-  for(let key of specialPlugins){
-    filteredPlugins[key] = plugins[key]
-  }
   return filteredPlugins
 }
+
+const pipeRunner = async (
+  plugins: IOpenedPlugins,
+  payload: any,
+  pluginsList?: string | string[],
+) => {
+  if(!pluginsList){return payload}
+  if(Array.isArray(pluginsList)){
+    let result = payload
+    for(const pluginName of pluginsList){
+      // eslint-disable-next-line no-await-in-loop
+      result = await plugins[pluginName](result)
+    }
+    return result
+  }
+  return await plugins[pluginsList as string](payload)
+}
+
 /**
  * Vuex keg plugin
  */
 export default (options: IVuexKegOptions = {}): TKegReturn => {
-  const {plugins = {}, beers = {}, resolve: _resolve} = options
-  const myPlugins: IPlugins = {resolve: resolve(_resolve)}
-  specialPlugins.push('resolve')
-  Object.assign(myPlugins, plugins, beers)
+  const {plugins = {}, beers = {}, beforeAction, afterAction} = options
   return (store: IKegStore<any>) => {
     setKegToStore(store, {
-      plugins: _agePlugins(myPlugins, store),
-      options: {resolve: _resolve},
+      plugins: _agePlugins({...plugins, ...beers}, store),
+      options: {beforeAction, afterAction},
     })
   }
 }
@@ -106,7 +116,7 @@ export const kegRunner = (
   injectedAction: TInjectedFunction,
   options: IKegOptions = {},
 ): ActionHandler<any, any> => {
-  return function kegTap(context, payload) {
+  return async function kegTap(context, payload) {
     const {plugins: kegPlugins, options: kegOptions} = getKegFromStore(this)
     if(!kegPlugins || !kegOptions){
       throw new Error('[vuex-keg] keg-plugin is undefined in Store')
@@ -115,19 +125,19 @@ export const kegRunner = (
       only,
       except,
       shouldHave,
-      resolve = kegOptions.resolve,
       payload: kegPayload,
+      beforeAction = kegOptions.beforeAction,
+      afterAction = kegOptions.afterAction,
       pluginOptions,
     } = options
     let filteredKegPlugins = filterPlugins(kegPlugins, {except, only, shouldHave})
-    filteredKegPlugins.resolve = kegPlugins.resolve
     const _context = {...context, name}
-    const plugins = _openPlugins(filteredKegPlugins, _context, payload, pluginOptions)
-    const result = injectedAction({...plugins, ..._context}, payload, kegPayload)
-    if(resolve){
-      plugins.resolve(result, resolve)
-    }
-    return result
+    const plugins: IOpenedPlugins = _openPlugins(
+      filteredKegPlugins, _context, payload, pluginOptions,
+    )
+    const _payload = await pipeRunner(plugins, payload, beforeAction)
+    const result = await injectedAction({...plugins, ..._context}, _payload, kegPayload)
+    return await pipeRunner(plugins, result, afterAction)
   }
 }
 

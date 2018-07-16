@@ -1,6 +1,5 @@
 import {ActionContext, Commit, Dispatch, Store} from 'vuex'
 import {sKeg, sKegOptions} from './'
-import {IResolveOptions} from './resolve'
 
 export type TOpenedPlugin = (...any: any[]) => any
 
@@ -42,7 +41,8 @@ export interface IKegOptions {
   only?: string[]
   except?: string[]
   shouldHave?: string[]
-  resolve?: boolean | IResolveOptions
+  beforeAction?: string | string[]
+  afterAction?: string | string[]
   pluginOptions?: IPluginRunTimeOptions
   payload?: any
   // when?: () => Promise<any> next feather

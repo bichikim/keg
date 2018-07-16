@@ -10,8 +10,8 @@ describe('Keg', function() {
   Vue.use(Vuex)
   let receive
   let receiveContext
-  let receiveTestSuccess
-  let receiveTestFailure
+  let receiveAfterPlugin
+  let receiveBeforePlugin
   let store
   const plugins = [
     vuexKeg({
@@ -19,37 +19,39 @@ describe('Keg', function() {
         test: (store) => {
           return (context, payload) => {
             return (prams) => {
-              receive = {
-                store,
-                context,
-                payload,
-                prams,
-              }
+              receive = {store, context, payload, prams}
             }
           }
         },
         forExcept: (store) => {
           return (context, payload) => {
             return (prams) => {
-              receive = {
-                store,
-                context,
-                payload,
-                prams,
-              }
+              receive = {store, context, payload, prams}
             }
           }
         },
         forRunTimePluginOptions: (store) => {
           return (context, payload, runtimeOptions) => {
             return (prams) => {
-              receive = {
-                store,
-                context,
-                payload,
-                prams,
-                runtimeOptions,
-              }
+              receive = {store, context, payload, prams, runtimeOptions}
+            }
+          }
+        },
+        forBeforePlugin: (store) => {
+          return (context, payload, runtimeOptions) => {
+            return (prams) => {
+              receive = {store, context, payload, prams, runtimeOptions}
+              receiveBeforePlugin = prams
+              return `before/${prams}`
+            }
+          }
+        },
+        forAfterPlugin: (store) => {
+          return (context, payload, runtimeOptions) => {
+            return (prams) => {
+              receive = {store, context, payload, prams: 'prams', runtimeOptions}
+              receiveAfterPlugin = prams
+              return `after/${prams}`
             }
           }
         },
@@ -58,12 +60,7 @@ describe('Keg', function() {
         forOnly: (store) => {
           return (context, payload) => {
             return (prams) => {
-              receive = {
-                store,
-                context,
-                payload,
-                prams,
-              }
+              receive = {store, context, payload, prams}
             }
           }
         },
@@ -90,22 +87,14 @@ describe('Keg', function() {
       const {forOnly} = context
       forOnly('prams')
     },
-    testResolveSuccess: (context) => {
-      receiveContext = context
-      const {test} = context
-      test('prams')
-      return Promise.resolve('success')
-    },
-    testResolveFailure: (context) => {
-      receiveContext = context
-      const {test} = context
-      test('prams')
-      return Promise.reject('failure')
-    },
     testPluginOptions: (context) => {
       receiveContext = context
       const {forRunTimePluginOptions} = context
       forRunTimePluginOptions('prams')
+    },
+    testBefore: (context, payload) => {
+      receiveContext = context
+      return payload.split('/')[1]
     },
   }
 
@@ -130,7 +119,6 @@ describe('Keg', function() {
             only: ['forOnly'], except: ['forExcept'], shouldHave: ['test'],
           }),
         },
-
         plugins,
       })
     })
@@ -152,34 +140,34 @@ describe('Keg', function() {
       expect(receiveContext.getters).to.deep.equal(store.getters)
       expect(receiveContext.rootGetters).to.deep.equal(store.getters)
     })
-    it('should run a keg plugin', () => {
-      store.dispatch('test', 'payload')
+    it('should run a keg plugin', async () => {
+      await store.dispatch('test', 'payload')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forExcept).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('should run a keg plugin: only', () => {
-      store.dispatch('testOnly', 'payload')
+    it('should run a keg plugin: only', async () => {
+      await store.dispatch('testOnly', 'payload')
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
       expect(receiveContext.test).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
     })
-    it('should run a keg plugin: expect', () => {
-      store.dispatch('testExcept', 'payload')
+    it('should run a keg plugin: expect', async () => {
+      await store.dispatch('testExcept', 'payload')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
     })
-    it('should run a keg plugin: expect & only', () => {
-      store.dispatch('testExceptAndOnly', 'payload')
+    it('should run a keg plugin: expect & only', async () => {
+      await store.dispatch('testExceptAndOnly', 'payload')
       expect(receiveContext.test).to.be.a('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
     })
-    it('should run a keg plugin: expect & only & shouldHave', () => {
-      store.dispatch('testExceptOnlyAndShouldHave', 'payload')
+    it('should run a keg plugin: expect & only & shouldHave', async () => {
+      await store.dispatch('testExceptOnlyAndShouldHave', 'payload')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
@@ -194,9 +182,7 @@ describe('Keg', function() {
       const {testOnly, testExcept, testExceptAndOnly} = actions
       store = new Vuex.Store({
         strict: true,
-        state: {
-          value: 1,
-        },
+        state: {value: 1},
         actions: {
           test: keg(actions.test),
           ...keg({
@@ -208,24 +194,24 @@ describe('Keg', function() {
         plugins,
       })
     })
-    it('should return object to map 1', () => {
-      store.dispatch('testOnly', 'payload')
+    it('should return object to map 1', async () => {
+      await store.dispatch('testOnly', 'payload')
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.a('function')
     })
-    it('should return object to map 2', () => {
-      store.dispatch('testExcept', 'payload')
+    it('should return object to map 2', async () => {
+      await store.dispatch('testExcept', 'payload')
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
       expect(receiveContext.forExcept).to.be.a('function')
     })
-    it('should return object to map 3', () => {
-      store.dispatch('testExceptAndOnly', 'payload')
+    it('should return object to map 3', async () => {
+      await store.dispatch('testExceptAndOnly', 'payload')
       expect(receive.payload).to.equal('payload')
       expect(receive.prams).to.equal('prams')
       expect(receiveContext.test).to.be.a('function')
@@ -251,21 +237,8 @@ describe('Keg', function() {
           testExceptAndOnly: keg.tap(actions.testExceptAndOnly, {
             only: ['forOnly'], except: ['forExcept'],
           }),
-          testResolveSuccess: keg.tap(actions.testResolveSuccess, {}, 'test'),
-          testResolveFailure: keg.tap(actions.testResolveFailure, {}, 'test'),
-          testPluginOptions: keg.tap(actions.testPluginOptions, {
-            pluginOptions: {
-              forRunTimePluginOptions: 'option',
-            },
-          }),
-        },
-        mutations: {
-          testFailure(state, payload) {
-            receiveTestFailure = payload
-          },
-          testSuccess(state, payload) {
-            receiveTestSuccess = payload
-          },
+          testPluginOptions: keg.tap(actions.testPluginOptions, {}),
+          testBefore: keg.tap(actions.testBefore),
         },
         plugins,
       })
@@ -274,8 +247,6 @@ describe('Keg', function() {
       receive = null
       receiveContext = null
       store = null
-      receiveTestSuccess = null
-      receiveTestFailure = null
     })
     afterEach('instance as members', () => {
       expect(keg).to.be.an('object')
@@ -297,102 +268,89 @@ describe('Keg', function() {
       expect(receiveContext.getters).to.deep.equal(store.getters)
       expect(receiveContext.rootGetters).to.deep.equal(store.getters)
     })
-    it('should create an instance without arguments', () => {
+    it('should create an instance without arguments', async () => {
       keg = new Keg()
       makeStore(keg)
-      store.dispatch('test', 'payload')
+      await store.dispatch('test', 'payload')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forExcept).to.be.a('function')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('should create an instance : only', () => {
+    it('should create an instance : only', async () => {
       keg = new Keg({only: ['forOnly']})
       makeStore(keg)
-      store.dispatch('testOnly', 'payload')
+      await store.dispatch('testOnly', 'payload')
       expect(receiveContext.test).to.be.an('undefined')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('should create an instance : except', () => {
+    it('should create an instance : except', async () => {
       keg = new Keg({except: ['forExcept']})
       makeStore(keg)
-      store.dispatch('testExcept', 'payload')
+      await store.dispatch('testExcept', 'payload')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('should create an instance : only & except', () => {
+    it('should create an instance : only & except', async () => {
       keg = new Keg({
         only: ['forOnly'],
         except: ['forExcept'],
       })
       makeStore(keg)
-      store.dispatch('testOnly', 'payload')
+      await store.dispatch('testOnly', 'payload')
       expect(receiveContext.test).to.be.a('undefined')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('should create an instance : only & except & shouldHave', () => {
+    it('should create an instance : only & except & shouldHave', async () => {
       keg = new Keg({
         only: ['forOnly'],
         except: ['forExcept'],
         shouldHave: ['test'],
       })
       makeStore(keg)
-      store.dispatch('testOnly', 'payload')
+      await store.dispatch('testOnly', 'payload')
       expect(receiveContext.test).to.be.a('function')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('should create an instance : resolve success', (done) => {
+    it('should create an instance : pluginOptions boolean type', async () => {
       keg = new Keg({
-        resolve: true,
+        pluginOptions: {
+          forRunTimePluginOptions: 'option',
+        },
       })
       makeStore(keg)
-      const promise = store.dispatch('testResolveSuccess', 'payload')
-      promise.then(() => {
-        expect(receiveTestSuccess).to.equal('success')
-        done()
-      }).catch((e) => {
-        done(e)
-      })
-    })
-    it('should create an instance : pluginOptions', () => {
-      keg = new Keg()
-      makeStore(keg)
-      store.dispatch('testPluginOptions', 'payload')
+      await store.dispatch('testPluginOptions', 'payload')
       expect(receiveContext.forRunTimePluginOptions).to.be.a('function')
       expect(receive.runtimeOptions).to.equal('option')
     })
-    it('should create an instance : resolve failure', (done) => {
+    it('should create an instance : beforeAction & afterAction', async () => {
       keg = new Keg({
-        resolve: true,
+        beforeAction: ['forBeforePlugin'],
+        afterAction: ['forAfterPlugin'],
       })
       makeStore(keg)
-      const promise = store.dispatch('testResolveFailure', 'payload')
-      promise.then(() => {
-        done('then')
-      }).catch(() => {
-        expect(receiveTestFailure).to.equal('failure')
-        done()
-      }).catch((e) => {
-        done(e)
-      })
+      const result = await store.dispatch('testBefore', 'payload')
+      expect(receiveBeforePlugin).to.equal('payload')
+      expect(receiveAfterPlugin).to.equal('payload')
+      expect(result).to.equal('after/payload')
     })
-    it('can change default options', () => {
+    it('can change default options', async () => {
       keg = new Keg({only: ['forOnly'], except: ['forExcept']})
       makeStore(keg)
       // change options
       keg.options = {only: ['forOnly']}
-      store.dispatch('testOnly', 'payload')
+      await store.dispatch('testOnly', 'payload')
       expect(receiveContext.test).to.be.an('undefined')
       expect(receiveContext.forExcept).to.be.an('undefined')
       expect(receiveContext.forOnly).to.be.a('function')
     })
-    it('can get options', () => {
+    it('can get options', async () => {
       keg = new Keg({only: ['forOnly'], except: ['forExcept']})
       makeStore(keg)
-      store.dispatch('testOnly', 'payload')
+      await store.dispatch('testOnly', 'payload')
       expect(keg.options).to.deep.equal({
         only: ['forOnly'],
         except: ['forExcept'],
@@ -407,8 +365,12 @@ describe('Keg', function() {
       actions: {test: keg(actions.test)},
     })
     it('should throw error when store has no keg-plugin', () => {
-      const error = () => {store.dispatch('test', 'payload')}
-      expect(error).to.throw('[vuex-keg] keg-plugin is undefined in Store')
+      store.dispatch('test', 'payload').then(() => {
+        console.log('omp')
+        throw Error('no Error')
+      }).catch((e) => {
+        expect(e).to.throw('[vuex-keg] keg-plugin is undefined in Store')
+      })
     })
   })
 
@@ -428,7 +390,7 @@ describe('Keg', function() {
 
   describe('keg without plugins', () => {
     let result
-    it('should run well 1', () => {
+    it('should run well 1', async () => {
       const store = new Vuex.Store({
         strict: true,
         state: {value: 1},
@@ -437,10 +399,10 @@ describe('Keg', function() {
         },
         plugins: [vuexKeg({})],
       })
-      store.dispatch('test', 'payload')
+      await store.dispatch('test', 'payload')
       expect(result).to.equal('test')
     })
-    it('should run well 2', () => {
+    it('should run well 2', async () => {
       const store = new Vuex.Store({
         strict: true,
         state: {value: 1},
@@ -449,7 +411,7 @@ describe('Keg', function() {
         },
         plugins: [vuexKeg()],
       })
-      store.dispatch('test', 'payload')
+      await store.dispatch('test', 'payload')
       expect(result).to.equal('test')
     })
   })
