@@ -375,6 +375,8 @@ describe('Keg', function() {
       }).catch(() => {
         expect(receiveTestFailure).to.equal('failure')
         done()
+      }).catch((e) => {
+        done(e)
       })
     })
     it('can change default options', () => {
