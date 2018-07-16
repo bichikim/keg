@@ -9,13 +9,13 @@
 const webpack = require('./webpack.test.config.js')
 module.exports = function(config) {
   config.set({
-    browsers: ['PhantomJS', 'ChromeWithoutSecurity'],
+    browsers: ['ChromeHeadlessWithoutSecurity'],
     frameworks: ['mocha', 'chai'],
     reporters: ['spec', 'coverage', 'remap-coverage'],
     files: [
       '../node_modules/babel-polyfill/dist/polyfill.js',
       {pattern: '../src/**/*.spec.js', watched: false},
-      {pattern: './test/specs/**/*.spec.js', watched: false},
+      {pattern: '../test/specs/**/*.spec.js', watched: false},
     ],
     exclude: [
       '../src/**/*.spec.skip.js',
@@ -24,7 +24,7 @@ module.exports = function(config) {
       '../src/**/*.js': ['webpack', 'sourcemap'],
       '../src/**/*.ts': ['webpack', 'sourcemap'],
       '../test/specs/**/*.js': ['webpack', 'sourcemap'],
-      './test/specs/**/*.ts': ['webpack', 'sourcemap'],
+      '../test/specs/**/*.ts': ['webpack', 'sourcemap'],
     },
     coverageReporter: {
       type: 'in-memory',
@@ -44,6 +44,10 @@ module.exports = function(config) {
     customLaunchers: {
       ChromeWithoutSecurity: {
         base: 'Chrome',
+        flags: ['--disable-web-security'],
+      },
+      ChromeHeadlessWithoutSecurity: {
+        base: 'ChromeHeadless',
         flags: ['--disable-web-security'],
       },
     },
