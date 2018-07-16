@@ -101,9 +101,11 @@ describe('Keg', function() {
       const {test} = context
       test('prams')
       return Promise.reject('failure')
-      // return new Promise((r, j) => {
-      //   j('failure')
-      // })
+    },
+    testPluginOptions: (context) => {
+      receiveContext = context
+      const {forRunTimePluginOptions} = context
+      forRunTimePluginOptions('prams')
     },
   }
 
@@ -251,6 +253,11 @@ describe('Keg', function() {
           }),
           testResolveSuccess: keg.tap(actions.testResolveSuccess, {}, 'test'),
           testResolveFailure: keg.tap(actions.testResolveFailure, {}, 'test'),
+          testPluginOptions: keg.tap(actions.testPluginOptions, {
+            pluginOptions: {
+              forRunTimePluginOptions: 'option',
+            },
+          }),
         },
         mutations: {
           testFailure(state, payload) {
@@ -349,6 +356,13 @@ describe('Keg', function() {
       }).catch((e) => {
         done(e)
       })
+    })
+    it('should create an instance : pluginOptions', () => {
+      keg = new Keg()
+      makeStore(keg)
+      store.dispatch('testPluginOptions', 'payload')
+      expect(receiveContext.forRunTimePluginOptions).to.be.a('function')
+      expect(receive.runtimeOptions).to.equal('option')
     })
     it('should create an instance : resolve failure', (done) => {
       keg = new Keg({

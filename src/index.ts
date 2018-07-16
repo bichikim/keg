@@ -137,6 +137,7 @@ export const keg = (
   name?: string,
 ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> => {
   if(typeof injectedAction === 'function'){
+    /* istanbul ignore if  */
     if(!name && process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test'){
       console.warn(
         '[vuex-keg] name is undefined. the keg won\'t know what function name' +
