@@ -6,11 +6,12 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbichikim%2Fkeg.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbichikim%2Fkeg?ref=badge_shield)
 [![Build Status](https://travis-ci.org/bichikim/keg.svg?branch=master)](https://travis-ci.org/bichikim/keg)
 [![Codecov](https://img.shields.io/codecov/c/github/bichikim/keg.svg)](https://codecov.io/github/bichikim/keg)
-
+![npm](https://img.shields.io/npm/v/vuex-keg.svg)
 
 
 [NPM IMAGE]:http://img.shields.io/npm/v/vuex-keg.svg?style=shield
 [NPM LINK]:https://www.npmjs.org/package/vuex-keg
+
 [LICENSE IMAGE]:https://img.shields.io/npm/l/vuex-keg.svg
 [PASSING]:https://circleci.com/gh/bichikim/keg.svg?style=shield&circle-tokrn=15b2464ef42b873445eae4ea8ac5726365199a3a
 [PASSING LINK]: https://circleci.com/gh/bichikim/keg
