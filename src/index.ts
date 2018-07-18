@@ -4,6 +4,7 @@ import Keg from './Keg'
 import {
   ActionHandler,
   IAgedPlugins,
+  IFnContext,
   IKegOptions,
   IKegStore,
   IOpenedPlugins,
@@ -92,7 +93,7 @@ const pipeRunner = async (
     }
     return result
   }
-  return await plugins[pluginsList as string](payload)
+  return plugins[pluginsList as string](payload)
 }
 
 /**
@@ -111,11 +112,11 @@ export default (options: IVuexKegOptions = {}): TKegReturn => {
 /**
  * Vuex custom utils container function
  */
-export const kegRunner = (
+export function kegRunner<T>(
   name: string,
-  injectedAction: TInjectedFunction,
+  injectedAction: TInjectedFunction<T>,
   options: IKegOptions = {},
-): ActionHandler<any, any> => {
+): ActionHandler<any, any> {
   return async function kegTap(context, payload) {
     const {plugins: kegPlugins, options: kegOptions} = getKegFromStore(this)
     if(!kegPlugins || !kegOptions){
@@ -137,15 +138,15 @@ export const kegRunner = (
     )
     const _payload = await pipeRunner(plugins, payload, beforeAction)
     const result = await injectedAction({...plugins, ..._context}, _payload, kegPayload)
-    return await pipeRunner(plugins, result, afterAction)
+    return pipeRunner(plugins, result, afterAction)
   }
 }
 
-export const keg = (
-  injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
+export function keg<T = IFnContext>(
+  injectedAction: {[name: string]: TInjectedFunction<T>} | TInjectedFunction<T>,
   options?: IKegOptions,
   name?: string,
-): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> => {
+): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> {
   if(typeof injectedAction === 'function'){
     /* istanbul ignore if  */
     if(!name && process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test'){
@@ -154,12 +155,12 @@ export const keg = (
         ' is in case of using function injectedAction',
       )
     }
-    return kegRunner(name, injectedAction, options)
+    return kegRunner<T>(name, injectedAction, options)
   }
   if(!Array.isArray(injectedAction) && typeof injectedAction === 'object'){
     const actions: {[name: string]: ActionHandler<any, any>} = {}
     Object.keys(injectedAction).forEach((key) => {
-      actions[key] = kegRunner(key, injectedAction[key], options)
+      actions[key] = kegRunner<T>(key, injectedAction[key], options)
     })
     return actions
   }

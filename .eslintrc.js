@@ -1,7 +1,7 @@
 /* eslint-disable max-len,no-magic-numbers */
 module.exports = {
-  'plugins': ['html', 'vue', 'typescript',],
-  'env': {
+  plugins: ['html', 'vue', 'typescript', ],
+  env: {
     'commonjs': true,
     'browser': true,
     'es6': true,
@@ -11,25 +11,26 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.spec.js'],
-      "rules": {
-        'max-nested-callbacks': 'off',
-        'no-magic-numbers': 'off',
-      }
-    },
-    {
       files: ['*.js'],
-      "rules": {
+      rules: {
         'indent': 'off',
       }
     },
     {
       files: ['*.ts'],
-      "rules": {
+      rules: {
         'new-cap': 'off',
+        'no-undef': 'off',
+        'no-undefined': 'off',
+        'no-unused-vars': 'off',
       }
     },
-
+    {
+      files: ['*.spec.js'],
+      rules: {
+        'no-undef': 'off',
+      }
+    }
   ],
   'extends': ['eslint:recommended', 'plugin:vue/recommended'],
   parserOptions: {
@@ -37,6 +38,10 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    /**************************************
+     * chai
+     **************************************/
+
     /**************************************
      * vue options
      **************************************/
@@ -49,9 +54,9 @@ module.exports = {
      **************************************/
     // off
     'one-var': 'off',
-    'no-undef': 'off',
-    'no-console': 'off',
-    // 'linebreak-style': ['error', 'unix'],
+    'no-undef': 'error',
+    'no-console': ['warn', {allow: ['warn', 'error']}],
+    'linebreak-style': 'off',
     // on
     'array-callback-return': 'error',
     'arrow-parens': ['error', 'always'],
@@ -70,27 +75,10 @@ module.exports = {
     'global-require': 'error',
     'guard-for-in': 'error',
     'indent': ['error', 2, { "SwitchCase": 1 }],
-    'keyword-spacing': ['error', {
-      'before': false,
-      'after': false,
-      'overrides': {
-        'const' : {before: true, after: true},
-        'let' : {before: true, after: true},
-        'from': {before: true, after: true},
-        'import': {before: true, after: true},
-        'as': {before: true, after: true},
-        'export': {after: true},
-        'return': {before: true, after: true},
-        'this': {before: true, after: true},
-        'case':{after: true},
-        'extends': {before: true},
-        'implements': {before: true},
-        'async': {after: true}
-      },
-    }],
+    'keyword-spacing': ['error', {'before': false, 'after': false, 'overrides': {'const' : {before: true, after: true}, 'let' : {before: true, after: true}, 'from': {before: true, after: true}, 'import': {before: true, after: true}, 'as': {before: true, after: true}, 'export': {after: true}, 'return': {before: true, after: true}, 'this': {before: true, after: true}, 'case':{after: true}, 'extends': {before: true}, 'implements': {before: true},},}],
     'max-depth': ['error', {'max': 4}],
     'max-len': ['error', 100],
-    'max-lines': ['error', 1000],
+    'max-lines': 'error',
     'max-nested-callbacks': ['error', {'max': 3}],
     'max-params': ['error', {'max': 6}],
     'max-statements-per-line': ['error', {'max': 2}],
@@ -135,7 +123,7 @@ module.exports = {
     'no-proto': 'error',
     'no-prototype-builtins': 'error',
     'no-return-assign': 'error',
-    // 'no-return-await': 'error',
+    'no-return-await': 'error',
     'no-script-url': 'error',
     'no-self-compare': 'error',
     'no-sequences': 'error',
@@ -181,22 +169,13 @@ module.exports = {
      *************************************/
     // off
     'typescript/explicit-member-accessibility': 'off',
-
+    'typescript/member-delimiter-style': 'off',
     'typescript/member-ordering': 'off',
     'typescript/no-empty-interface': 'off',
     'typescript/no-explicit-any': 'off',
     'typescript/no-type-alias': 'off',
     'typescript/no-use-before-define ': 'off',
     // on
-    'typescript/member-delimiter-style': ['error', {
-      delimiter: 'none',
-      overrides: {
-        typeLiteral: {
-          delimiter: "comma",
-          requireLast: true,
-        }
-      }
-    }],
     'typescript/adjacent-overload-signatures': 'error',
     'typescript/class-name-casing': 'error',
     'typescript/interface-name-prefix': ['error', 'always'],
@@ -210,7 +189,7 @@ module.exports = {
     'typescript/type-annotation-spacing': [
       'error', {
         'before': false,
-        'after': true,
+        'after': false,
         'overrides': {
           'arrow': {
             'before': true,

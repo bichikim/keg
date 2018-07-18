@@ -11,8 +11,8 @@ export type TAgedPlugin = (
   pluginOptions?: any,
 ) => TOpenedPlugin
 
-export type TInjectedFunction = (
-  context: IFnContext,
+export type TInjectedFunction<T> = (
+  context: T | IFnContext,
   payload: any,
   kegPayload?: any,
 ) => any
