@@ -31,7 +31,7 @@ Vuex context has only {dispatch, commit, state, getters, rootState, rootGetters}
 Vuex-keg is a solution to add more **your functions** for vuex
 
 ## Why Should I Add More functions?
-You may need a function that processes repetitve code.
+You may need a function to process repetitive code.
 ```javascript
 const actions = {
   myAction({commit, dispatch}, payload){
