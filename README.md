@@ -93,12 +93,11 @@ const store = new Vuex.Store({
       IAmJustAnAction({commit}, payload) {
         commit('increase')
       },
-      // support single runing with a name parm
+      // support single running by the name parameter
       doSayHum: keg(({justSay}, payload) => {
         justSay('Hum', 'foo')
       }, {}, 'doSayHum'),
-      // New Feature 
-      // Now keg can set many actions at ones
+      // Now Keg can set many actions at once
       ...keg({
         doSayHi({justSay, commit}, payload) {
           // custom keg util
@@ -123,7 +122,7 @@ const store = new Vuex.Store({
            justSay: 'anyOptions' // now Keg can send options for plugins
          }
       }),
-      // now Keg can hook of an Action before the Action is run or after the Action is run [^1.2.1]
+      // now Keg can hook before and after the Action is executed [^1.2.1]
       ...keg({
         hookTest: (context, payload) => {
           console.log(payload) // 'brforeHook/[payload]'
@@ -131,7 +130,7 @@ const store = new Vuex.Store({
         } // action result is 'afterHook/brforeHook/[payload]'
       }, {
         // shouldHave: ... // ignore except/ only options
-        beforeAction: ['beforeHook'], // can be array, It will run all plugins orderly
+        beforeAction: ['beforeHook'], // it can be array, which will run all plugins in order
         afterAction: 'afterHook', // can be string
       })
     },
