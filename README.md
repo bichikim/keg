@@ -94,6 +94,7 @@ const store = new Vuex.Store({
         commit('increase')
       },
       // support single running by the name parameter
+      // no need the name if you think you don't need to use context.name in plugins of Vuex-keg
       doSayHum: keg(({justSay}, payload) => {
         justSay('Hum', 'foo')
       }, {}, 'doSayHum'),
