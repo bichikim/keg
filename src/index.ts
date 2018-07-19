@@ -133,7 +133,8 @@ export function kegRunner<T>(
     } = options
     let filteredKegPlugins = filterPlugins(kegPlugins, {except, only, shouldHave})
     const _context = {...context,
-      get name() {
+      get name(): string {
+        /* istanbul ignore if  */
         if(!name && process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test'){
           console.warn(
             '[vuex-keg] name is undefined. the keg won\'t know what function name' +
@@ -158,7 +159,6 @@ export function keg<T = IFnContext>(
   name?: string,
 ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> {
   if(typeof injectedAction === 'function'){
-    /* istanbul ignore if  */
     return kegRunner<T>(name, injectedAction, options)
   }
   if(!Array.isArray(injectedAction) && typeof injectedAction === 'object'){

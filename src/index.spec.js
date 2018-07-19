@@ -1,4 +1,4 @@
-/* eslint-disable max-nested-callbacks */
+/* eslint-disable max-nested-callbacks,max-lines */
 import vuexKeg, {keg, Keg, sKeg} from './index'
 import Vuex from 'vuex'
 import Vue from 'vue'
@@ -390,7 +390,6 @@ describe('Keg', function() {
     })
     it('should throw error when store has no keg-plugin', () => {
       store.dispatch('test', 'payload').then(() => {
-        console.log('omp')
         throw Error('no Error')
       }).catch((e) => {
         expect(e).to.throw('[vuex-keg] keg-plugin is undefined in Store')

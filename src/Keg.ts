@@ -13,8 +13,8 @@ export default class Keg {
   /**
    * use custom utils
    */
-  tap(
-    injectedAction: {[name: string]: TInjectedFunction} | TInjectedFunction,
+  tap<T>(
+    injectedAction: {[name: string]: TInjectedFunction<T>} | TInjectedFunction<T>,
     options: IKegOptions = {},
     name?: string,
   ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> {
