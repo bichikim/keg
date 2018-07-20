@@ -18,7 +18,7 @@ import {
 } from './types'
 export const sKeg = Symbol('keg')
 export const sKegOptions = Symbol('kegOptions')
-export * from 'vuex/types'
+export * from './types'
 export {Keg}
 
 /**
