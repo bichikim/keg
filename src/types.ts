@@ -12,7 +12,7 @@ export type TAgedPlugin = (
 ) => TOpenedPlugin
 
 export type TInjectedFunction<T> = (
-  context: T | IFnContext,
+  context: T | IKegContext,
   payload: any,
   kegPayload?: any,
 ) => any
@@ -22,7 +22,7 @@ export type TKegReturn = (store: IKegStore<any>) => void
 // since vuex not updated for this yet, I defined this
 export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any
 
-export interface IFnContext{
+export interface IKegContext{
   dispatch: Dispatch
   commit: Commit
   state: any

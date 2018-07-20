@@ -4,7 +4,7 @@ import Keg from './Keg'
 import {
   ActionHandler,
   IAgedPlugins,
-  IFnContext,
+  IKegContext,
   IKegOptions,
   IKegStore,
   IOpenedPlugins,
@@ -18,6 +18,7 @@ import {
 } from './types'
 export const sKeg = Symbol('keg')
 export const sKegOptions = Symbol('kegOptions')
+export * from 'vuex/types'
 export {Keg}
 
 /**
@@ -153,7 +154,7 @@ export function kegRunner<T>(
   }
 }
 
-export function keg<T = IFnContext>(
+export function keg<T = IKegContext>(
   injectedAction: {[name: string]: TInjectedFunction<T>} | TInjectedFunction<T>,
   options?: IKegOptions,
   name?: string,
