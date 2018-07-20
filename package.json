@@ -1,6 +1,6 @@
 {
   "name": "vuex-keg",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Support custtom util in Vuex action",
   "author": "bichi",
   "main": "dist/app.js",
@@ -77,6 +77,6 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.5"
   }
 }
