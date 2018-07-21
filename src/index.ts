@@ -154,6 +154,9 @@ export function kegRunner<T>(
   }
 }
 
+/**
+ * keg operator
+ */
 export function keg<T = IKegContext>(
   injectedAction: {[name: string]: TInjectedFunction<T>} | TInjectedFunction<T>,
   options?: IKegOptions,
