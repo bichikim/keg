@@ -1,10 +1,10 @@
 import {keg} from './'
-import {ActionHandler, IKegOptions, TInjectedFunction} from './types'
+import {ActionHandler, IKegContext, IKegOptions, TInjectedFunction} from './types'
 
 /**
  * Vuex custom utils container class
  */
-export default class Keg {
+export default class Keg<T = IKegContext> {
   private _options: IKegOptions
   constructor(options: IKegOptions = {}) {
     this._options = options
@@ -13,7 +13,7 @@ export default class Keg {
   /**
    * use custom utils
    */
-  tap<T>(
+  tap(
     injectedAction: {[name: string]: TInjectedFunction<T>} | TInjectedFunction<T>,
     options: IKegOptions = {},
     name?: string,
