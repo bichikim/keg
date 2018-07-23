@@ -17,7 +17,7 @@ export type TInjectedFunction<T> = (
   kegPayload?: any,
 ) => any
 
-export type TKegReturn = (store: IKegStore<any>) => void
+export type TKegReturn = (store: Store<any>) => void
 
 // since vuex not updated for this yet, I defined this
 export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any
