@@ -135,7 +135,7 @@ const store = new Vuex.Store({
         } // action result is 'afterHook/brforeHook/[payload]'
       }, {
         // shouldHave: ... // ignore except/ only options
-        beforeHook: ['beforeHook'], // it can be array, which will run all plugins in order
+        beforeHook: ['beforeHook', (context, payload) => (payload)], // it can be array, which will run all plugins in order
         afterHook: 'afterHook', // can be string
       })
     },
