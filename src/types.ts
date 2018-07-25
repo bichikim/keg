@@ -1,5 +1,9 @@
-import {ActionContext, Commit, Dispatch, Store} from 'vuex'
+import {ActionContext, Store} from 'vuex'
 import {sKeg, sKegOptions} from './'
+
+// T = ActionContext with Plugins
+// S = Store State
+// R = Store local State
 
 export type TOpenedPlugin = (...any: any[]) => any
 
@@ -12,45 +16,37 @@ export type TAgedPlugin = (
 ) => TOpenedPlugin
 
 export type TInjectedFunction<T> = (
-  context: T | IKegContext,
+  context: T,
   payload: any,
   kegPayload?: any,
 ) => any
 
 export type TKegReturn = (store: Store<any>) => void
 
-export type TFnHook = (context: IKegContext, payload: any) => any
+export type TFnHook<T> = (context: T, payload: any) => any
 
 // since vuex not updated for this yet, I defined this
 export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any
 
-export interface IKegContext{
-  dispatch: Dispatch
-  commit: Commit
-  state: any
-  getters: any
-  rootState: any
-  rootGetters: any
+export interface IKegContext<S, R> extends ActionContext<S, R>{
   name: string
-  [plugin: string]: TOpenedPlugin | any
 }
 
 export interface IPluginRunTimeOptions {
   [name: string]: any
 }
 
-export interface IKegOptions {
+export interface IKegOptions<T> {
   only?: string[]
   except?: string[]
   shouldHave?: string[]
-  beforeHook?: string | string[] | TFnHook | TFnHook[]
-  afterHook?: string | string[] | TFnHook | TFnHook[]
+  beforeHook?: string | string[] | TFnHook<T> | Array<TFnHook<T>>
+  afterHook?: string | string[] | TFnHook<T> |  Array<TFnHook<T>>
   pluginOptions?: IPluginRunTimeOptions
   payload?: any
-  // when?: () => Promise<any> next feather
 }
 
-export interface IVuexKegOptions extends IKegOptions{
+export interface IVuexKegOptions<T> extends IKegOptions<T>{
   plugins?: IPlugins
   beers?: IPlugins // = plugins
   pluginOptions?: null // no item
@@ -68,7 +64,7 @@ export interface IOpenedPlugins {
   [name: string]: TOpenedPlugin
 }
 
-export interface IKegStore<T> extends Store<T>{
+export interface IKegStore<T, S> extends Store<S>{
   [sKeg]: IAgedPlugins
-  [sKegOptions]: IKegOptions
+  [sKegOptions]: IKegOptions<T>
 }

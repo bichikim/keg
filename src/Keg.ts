@@ -4,9 +4,9 @@ import {ActionHandler, IKegContext, IKegOptions, TInjectedFunction} from './type
 /**
  * Vuex custom utils container class
  */
-export default class Keg<T = IKegContext> {
-  private _options: IKegOptions
-  constructor(options: IKegOptions = {}) {
+export default class Keg<T extends IKegContext<S, R>, S, R> {
+  private _options: IKegOptions<T>
+  constructor(options: IKegOptions<T> = {}) {
     this._options = options
   }
 
@@ -15,7 +15,7 @@ export default class Keg<T = IKegContext> {
    */
   tap(
     injectedAction: {[name: string]: TInjectedFunction<T>} | TInjectedFunction<T>,
-    options: IKegOptions = {},
+    options: IKegOptions<T> = {},
     name?: string,
   ): {[name: string]: ActionHandler<any, any>} | ActionHandler<any, any> {
     const {_options} = this
@@ -25,14 +25,14 @@ export default class Keg<T = IKegContext> {
   /**
    * change default options
    */
-  set options(options: IKegOptions) {
+  set options(options: IKegOptions<T>) {
     this._options = options
   }
 
   /**
    * get default options
    */
-  get options(): IKegOptions {
+  get options(): IKegOptions<T> {
     return {...this._options}
   }
 }
