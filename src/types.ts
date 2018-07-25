@@ -19,6 +19,8 @@ export type TInjectedFunction<T> = (
 
 export type TKegReturn = (store: Store<any>) => void
 
+export type TFnHook = (context: IKegContext, payload: any) => any
+
 // since vuex not updated for this yet, I defined this
 export type ActionHandler<S, R> = (injectee: ActionContext<S, R>, payload: any) => any
 
@@ -41,8 +43,8 @@ export interface IKegOptions {
   only?: string[]
   except?: string[]
   shouldHave?: string[]
-  beforeAction?: string | string[]
-  afterAction?: string | string[]
+  beforeHook?: string | string[] | TFnHook | TFnHook[]
+  afterHook?: string | string[] | TFnHook | TFnHook[]
   pluginOptions?: IPluginRunTimeOptions
   payload?: any
   // when?: () => Promise<any> next feather

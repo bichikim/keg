@@ -26,6 +26,10 @@ $ npm i -S vuex-keg
 $ yarn add vuex-keg
 ``
 
+## Vuex Keg plugins
+ - [vuex-keg-request](https://www.npmjs.com/package/vuex-keg-request)
+ - [vuex-keg-resolve](https://www.npmjs.com/package/vuex-keg-resolve)
+
 ## Why Do I Need This?
 Vuex context has only {dispatch, commit, state, getters, rootState, rootGetters}\
 Vuex-keg is a solution to add more **your functions** for vuex
@@ -131,8 +135,8 @@ const store = new Vuex.Store({
         } // action result is 'afterHook/brforeHook/[payload]'
       }, {
         // shouldHave: ... // ignore except/ only options
-        beforeAction: ['beforeHook'], // it can be array, which will run all plugins in order
-        afterAction: 'afterHook', // can be string
+        beforeHook: ['beforeHook'], // it can be array, which will run all plugins in order
+        afterHook: 'afterHook', // can be string
       })
     },
     plugins: [

@@ -12,6 +12,7 @@ import {
   IPlugins,
   IVuexKegOptions,
   TAgedPlugin,
+  TFnHook,
   TInjectedFunction,
   TKegReturn,
   TPlugin,
@@ -80,32 +81,62 @@ const filterPlugins = (
   return filteredPlugins
 }
 
-const pipeRunner = async (
+const resolveHook = (
+  context: IKegContext,
   plugins: IOpenedPlugins,
   payload: any,
-  pluginsList?: string | string[],
+  hook: string | TFnHook,
 ) => {
-  if(!pluginsList){return payload}
-  if(Array.isArray(pluginsList)){
-    let result = payload
-    for(const pluginName of pluginsList){
+  if(typeof hook === 'string'){
+    const plugin = plugins[hook]
+    if(typeof plugin === 'function'){
       // eslint-disable-next-line no-await-in-loop
-      result = await plugins[pluginName](result)
+      return plugin(payload)
+    }
+    /* istanbul ignore next */
+    if(process.env.NODE_ENV !== 'production'){
+      console.warn(
+        '[vuex-keg pipeRunner] hook name should be plugin name in the plugins')
+    }
+    return payload
+  }else if(typeof hook === 'function'){
+    // eslint-disable-next-line no-await-in-loop
+    return hook(context, payload)
+  }
+  /* istanbul ignore next  */
+  if(process.env.NODE_ENV !== 'production'){
+    console.warn('[vuex-keg pipeRunner] hook should be function or string')
+  }
+  return payload
+}
+
+const pipeRunner = async (
+  context: IKegContext,
+  plugins: IOpenedPlugins,
+  payload: any,
+  hookList?: string | string[] | TFnHook | TFnHook[],
+) => {
+  if(!hookList){return payload}
+  if(Array.isArray(hookList)){
+    let result: any = payload
+    for(const hook of hookList){
+      // eslint-disable-next-line no-await-in-loop
+      result = await resolveHook(context, plugins, result, hook)
     }
     return result
   }
-  return plugins[pluginsList as string](payload)
+  return resolveHook(context, plugins, payload, hookList)
 }
 
 /**
  * Vuex keg plugin
  */
 export default (options: IVuexKegOptions = {}): TKegReturn => {
-  const {plugins = {}, beers = {}, beforeAction, afterAction} = options
+  const {plugins = {}, beers = {}, beforeHook, afterHook} = options
   return (store: IKegStore<any>) => {
     setKegToStore(store, {
       plugins: _agePlugins({...plugins, ...beers}, store),
-      options: {beforeAction, afterAction},
+      options: {beforeHook, afterHook},
     })
   }
 }
@@ -128,12 +159,12 @@ export function kegRunner<T>(
       except,
       shouldHave,
       payload: kegPayload,
-      beforeAction = kegOptions.beforeAction,
-      afterAction = kegOptions.afterAction,
+      beforeHook = kegOptions.beforeHook,
+      afterHook = kegOptions.afterHook,
       pluginOptions,
     } = options
     let filteredKegPlugins = filterPlugins(kegPlugins, {except, only, shouldHave})
-    const _context = {...context,
+    const _context: IKegContext = {...context,
       get name(): string {
         /* istanbul ignore if  */
         if(!name && process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test'){
@@ -148,9 +179,9 @@ export function kegRunner<T>(
     const plugins: IOpenedPlugins = _openPlugins(
       filteredKegPlugins, _context, payload, pluginOptions,
     )
-    const _payload = await pipeRunner(plugins, payload, beforeAction)
+    const _payload = await pipeRunner(_context, plugins, payload, beforeHook)
     const result = await injectedAction({...plugins, ..._context}, _payload, kegPayload)
-    return pipeRunner(plugins, result, afterAction)
+    return pipeRunner(_context, plugins, result, afterHook)
   }
 }
 

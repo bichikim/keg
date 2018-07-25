@@ -328,10 +328,10 @@ describe('Keg', function() {
       expect(receiveContext.forRunTimePluginOptions).to.be.a('function')
       expect(receive.runtimeOptions).to.equal('option')
     })
-    it('should create an instance : beforeAction list & afterAction list', async () => {
+    it('should create an instance : beforeHook list & afterHook list', async () => {
       keg = new Keg({
-        beforeAction: ['forBeforePlugin'],
-        afterAction: ['forAfterPlugin'],
+        beforeHook: ['forBeforePlugin'],
+        afterHook: ['forAfterPlugin'],
       })
       makeStore(keg)
       const result = await store.dispatch('testBefore', 'payload')
@@ -339,10 +339,10 @@ describe('Keg', function() {
       expect(receiveAfterPlugin).to.equal('payload')
       expect(result).to.equal('after/payload')
     })
-    it('should create an instance : beforeAction list & afterAction list', async () => {
+    it('should create an instance : beforeHook list & afterHook list', async () => {
       keg = new Keg({
-        beforeAction: ['forBeforePlugin'],
-        afterAction: ['forAfterPlugin'],
+        beforeHook: ['forBeforePlugin'],
+        afterHook: ['forAfterPlugin'],
       })
       makeStore(keg)
       const result = await store.dispatch('testBefore', 'payload')
@@ -350,16 +350,62 @@ describe('Keg', function() {
       expect(receiveAfterPlugin).to.equal('payload')
       expect(result).to.equal('after/payload')
     })
-    it('should create an instance : beforeAction list & afterAction', async () => {
+    it('should create an instance : beforeHook list & afterHook', async () => {
       keg = new Keg({
-        beforeAction: 'forBeforePlugin',
-        afterAction: 'forAfterPlugin',
+        beforeHook: 'forBeforePlugin',
+        afterHook: 'forAfterPlugin',
       })
       makeStore(keg)
       const result = await store.dispatch('testBefore', 'payload')
       expect(receiveBeforePlugin).to.equal('payload')
       expect(receiveAfterPlugin).to.equal('payload')
       expect(result).to.equal('after/payload')
+    })
+    it('should create an instance : beforeHook (none plugin name) & afterHook index.spec.js',
+      async () => {
+      keg = new Keg({
+        beforeHook: ['nonePlugin', 'forBeforePlugin'],
+        afterHook: ['nodePlugin', 'forAfterPlugin'],
+      })
+      makeStore(keg)
+      const result = await store.dispatch('testBefore', 'payload')
+      expect(receiveBeforePlugin).to.equal('payload')
+      expect(receiveAfterPlugin).to.equal('payload')
+      expect(result).to.equal('after/payload')
+    })
+    it('should create an instance : beforeHook (function) & afterHook (function)', async () => {
+      keg = new Keg({
+        beforeHook: (context, payload) => {
+          receive = {store, context, payload, prams: 'prams'}
+          receiveBeforePlugin = payload
+          return `before/${payload}`
+        },
+        afterHook: (context, payload) => {
+          receiveAfterPlugin = payload
+          return `after/${payload}`
+        },
+      })
+      makeStore(keg)
+      const result = await store.dispatch('testBefore', 'payload')
+      expect(receiveBeforePlugin).to.equal('payload')
+      expect(receiveAfterPlugin).to.equal('payload')
+      expect(result).to.equal('after/payload')
+    })
+    it('should create an instance : beforeHook (function) & afterHook (none function)',
+      async () => {
+      keg = new Keg({
+        beforeHook: (context, payload) => {
+          receive = {store, context, payload, prams: 'prams'}
+          receiveBeforePlugin = payload
+          return `before/${payload}`
+        },
+        afterHook: {},
+      })
+      makeStore(keg)
+      const result = await store.dispatch('testBefore', 'payload')
+      expect(receiveBeforePlugin).to.equal('payload')
+        expect(receiveAfterPlugin).to.equal(null)
+      expect(result).to.equal('payload')
     })
     it('can change default options', async () => {
       keg = new Keg({only: ['forOnly'], except: ['forExcept']})
