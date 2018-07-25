@@ -6,9 +6,19 @@
           "> 1%",
           "last 2 versions",
           "not ie <= 8"
-        ]
+        ],
+        "node": "8.11"
       },
       "modules": false
     }
-  ], "stage-1", "stage-2", "stage-3"]
+  ], "stage-1", "stage-2", "stage-3"],
+  "env": {
+    "test": {
+      "presets": [[
+        "env", {
+          "modules": false
+        }
+      ], "stage-1", "stage-2", "stage-3"]
+    }
+  }
 }
