@@ -2,8 +2,8 @@ import {ActionContext, Store} from 'vuex'
 import {sKeg, sKegOptions} from './'
 
 // T = ActionContext with Plugins
-// S = Store State
-// R = Store local State
+// S = Store local State
+// R = Root State
 
 export type TOpenedPlugin = (...any: any[]) => any
 
