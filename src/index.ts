@@ -145,11 +145,11 @@ export default function kegPlugin<T, S>(options: IVuexKegOptions<T> = {}): TKegR
  * Vuex custom utils container function
  */
 export function kegRunner<T extends IKegContext<S, R> , S, R>(
-  name: string,
+  name: string = '',
   injectedAction: TInjectedFunction<T>,
   options: IKegOptions<T> = {},
 ): ActionHandler<any, any> {
-  return async function kegTap(context: T, payload) {
+  return async function kegTap(this: IKegStore<S, R>, context: ActionContext<S, R>, payload) {
     const {plugins: kegPlugins, options: kegOptions} = getKegFromStore(this)
     if(!kegPlugins || !kegOptions){
       throw new Error('[vuex-keg] keg-plugin is undefined in Store')
@@ -179,12 +179,12 @@ export function kegRunner<T extends IKegContext<S, R> , S, R>(
     const plugins: IOpenedPlugins = _openPlugins(
       filteredKegPlugins, _context, payload, pluginOptions,
     )
-    const _payload = await pipeRunner(_context, plugins, payload, beforeHook)
+    const _payload = await pipeRunner<any, any, any>(_context, plugins, payload, beforeHook)
     const result = await injectedAction({
       ...plugins,
       ..._context as any,
     }, _payload, kegPayload)
-    return pipeRunner(_context, plugins, result, afterHook)
+    return pipeRunner<any, any, any>(_context, plugins, result, afterHook)
   }
 }
 

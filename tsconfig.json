@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "strict": true,
     "module": "esnext",
     "target": "es5",
     "lib": [
       "dom",
+      "es2015",
       "esnext"
     ],
     "noEmitHelpers": false,
@@ -14,13 +16,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["./src/*"],
-      "~/*": ["./lib/*"],
-      "@@/*": ["./*"],
-      "~~/*": ["./*"]
-    }
+    "baseUrl": "./"
   },
   "include": [
     "src/**/*.ts",

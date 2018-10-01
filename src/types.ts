@@ -21,7 +21,7 @@ export type TInjectedFunction<T> = (
   kegPayload?: any,
 ) => any
 
-export type TKegReturn = (store: Store<any>) => void
+export type TKegReturn = (store: IKegStore<any, any>) => void
 
 export type TFnHook<T> = (context: T, payload: any) => any
 
@@ -49,7 +49,6 @@ export interface IKegOptions<T> {
 export interface IVuexKegOptions<T> extends IKegOptions<T>{
   plugins?: IPlugins
   beers?: IPlugins // = plugins
-  pluginOptions?: null // no item
 }
 
 export interface IPlugins {
