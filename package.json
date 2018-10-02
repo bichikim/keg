@@ -1,6 +1,6 @@
 {
   "name": "vuex-keg",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Support custtom util in Vuex action",
   "author": "bichi",
   "main": "dist/app.js",
