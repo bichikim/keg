@@ -2,6 +2,11 @@
   "extends": [
     "tslint:recommended"
   ],
+  "linterOptions": {
+    "exclude": [
+      "declarations"
+    ]
+  },
   "rules": {
     "class-name": true,
     "curly": true,
